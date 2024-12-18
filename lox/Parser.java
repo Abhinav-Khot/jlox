@@ -27,7 +27,20 @@ class Parser
 
     private Expr expression()
     {
-        return equality();
+        return ternary();
+    }
+    
+    private Expr ternary() // grammar rule ternary --> equality (? exquality : ternary)*, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
+    {
+       Expr expr = equality();
+       if(match(QUESTION_MARK))
+       {
+          Expr trueBranch = equality();
+          consume(COLON, ": Must be accompanied with the ? (else condition not specified)");
+          Expr falseBranch = ternary();
+          return new Expr.Ternary(expr, trueBranch, falseBranch);
+       }
+       return expr;
     }
 
     private Expr equality()

@@ -95,7 +95,12 @@ class Scanner {
                   addToken(SLASH);
                 }
                 break;
-
+          case '?':
+                addToken(QUESTION_MARK);
+                break;
+          case ':':
+                addToken(COLON);
+                break;
           case ' ': //neat overflow trick, control keeps executes everything after this until a break statement is encountered.
           case '\r':
           case '\t':

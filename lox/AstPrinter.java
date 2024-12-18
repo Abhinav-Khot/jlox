@@ -28,6 +28,12 @@ public class AstPrinter implements Expr.Visitor<String>{
         return parenthesize(expr.operator.lexeme, expr.right);
     }
 
+    @Override
+    public String visitTernaryExpr(Expr.Ternary expr)
+    {
+        return parenthesize("if", expr.Condition, expr.TrueBranch, expr.FalseBranch);
+    }
+
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
     
