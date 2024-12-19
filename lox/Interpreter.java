@@ -1,6 +1,7 @@
 package lox;
+import java.util.List;
 
-public class Interpreter implements Expr.Visitor<Object>{
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     class RuntimeError extends RuntimeException
     {
@@ -13,18 +14,42 @@ public class Interpreter implements Expr.Visitor<Object>{
         }
     }
 
-    void interpret(Expr expr)
+    void interpret(List<Stmt> statements)
     {
         try 
         {
-            Object val = evaluate(expr);
-            System.out.println(stringify(val));
+            for(Stmt statement : statements)
+            {
+                execute(statement);
+            }
         }
         catch(RuntimeError Err)
         {
             Lox.runtimeError(Err);
         }
     }
+
+    private Void execute(Stmt stmt)
+    {
+        stmt.accept(this);
+        return null;
+    }
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt)
+    {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt)
+    {
+        Object val = evaluate(stmt.expression);
+        System.out.println(stringify(val));
+        return null;
+    }
+
     @Override
     public Object visitLiteralExpr(Expr.Literal expr)
     {

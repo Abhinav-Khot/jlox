@@ -1,5 +1,6 @@
 package lox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static lox.TokenType.*;
@@ -17,19 +18,43 @@ class Parser
         this.tokens = tokens;
     }
 
-    Expr parse() {
-        try {
-          return expression();
-        } catch (ParseError error) {
-          return null;
+    List<Stmt> parse() { //TODO: Add the parseError handling we had here earlier
+        List<Stmt> statements = new ArrayList<>();
+
+        while(!isAtEnd())
+        {
+            statements.add(statement());
         }
+
+        return statements;
       }
+
+    private Stmt statement()
+    {
+        if(match(PRINT)) return printStatement();
+
+        return expressionStatement();
+    }
+
+    private Stmt printStatement()
+    {
+        Expr val = expression();
+        consume(SEMICOLON, "Expected ';' at the end");
+        return new Stmt.Print(val);
+    }
+
+    private Stmt expressionStatement()
+    {
+        Expr val = expression();
+        consume(SEMICOLON, "Expected ';' at the end");
+        return new Stmt.Expression(val);
+    }
 
     private Expr expression()
     {
         return ternary();
     }
-    
+
     private Expr ternary() // grammar rule ternary --> equality (? exquality : ternary)*, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
     {
        Expr expr = equality();
@@ -122,6 +147,7 @@ class Parser
 
         throw error(peek(), "Expects an expression.");
       }
+
     private boolean match(TokenType... types)
     {
         for(TokenType type : types)
@@ -142,7 +168,7 @@ class Parser
     }
 
     private ParseError error(Token token, String message) {
-        Lox.error(token, message);
+        Lox.error(token, message);  
         return new ParseError();
       }
 
