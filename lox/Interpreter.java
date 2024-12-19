@@ -79,9 +79,10 @@ public class Interpreter implements Expr.Visitor<Object>{
 
             case SLASH:
                 checkNumberOperands(expr.operator, left, right);
+                if((double)right == 0) throw new RuntimeError(expr.operator, "Division by Zero is not permitted");
                 return (double)left / (double)right;
 
-            case PLUS:
+            case PLUS: //TODO : concantenation of a number with a string causes even the leading .0 to be present, remove that eg : 8 + b = 8.0b
                 if(left instanceof String && right instanceof String) return (String)left + (String)right; //even if one of the operators is a string, concatenate them
                 
                 if(left instanceof Double && right instanceof Double) return (double)left + (double)right; //add only if both are double
