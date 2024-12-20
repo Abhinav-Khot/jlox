@@ -1,0 +1,59 @@
+[33mcommit f186338c9abd04c8d56c2f132c1624aea60cf943[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Fri Dec 20 20:52:14 2024 +0530
+
+    Added support to display the result of expression statements in REPL
+
+[33mcommit f76be66810dd0a791f4f881ee47100d4ea25d1d0[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Fri Dec 20 00:02:08 2024 +0530
+
+    Added barebones support to parse and execute statements(print and expression statements)
+
+[33mcommit 8297f5a0b922eb8d4720a202623caa1f6352760a[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Thu Dec 19 19:05:25 2024 +0530
+
+    added statement class and subclasses
+
+[33mcommit 905c2ddf24e32a5ba868472cf916c31f7edc2b17[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Thu Dec 19 15:02:03 2024 +0530
+
+    added interpretor, working on additional functionality
+
+[33mcommit 5df442151cfff08d35b245e08e0f4386264ff892[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Wed Dec 18 22:36:18 2024 +0530
+
+    added support for ternary operator in parser
+
+[33mcommit 1bff09999edfd2200eaa1cf55a1dcaad9298ede4[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Wed Dec 18 00:05:13 2024 +0530
+
+    added gitignore
+
+[33mcommit c2b3de3e20cdaf6265b7f49863b32b92da21c62a[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Wed Dec 18 00:04:30 2024 +0530
+
+    added gitignore
+
+[33mcommit 66a7e4fe5098922a1712bd0bd8f6269b5ee1d60e[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Wed Dec 18 00:03:48 2024 +0530
+
+    rf
+
+[33mcommit 2b2afef8d199483dad0f21c98eb9511024a0dabf[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Wed Dec 18 00:00:47 2024 +0530
+
+    fixed minor issue
+
+[33mcommit 2ecd6708eb93c3b4c4bb70159742d6e67dfa2e5b[m
+Author: Abhinav-Khot <23110006@iitgn.ac.in>
+Date:   Tue Dec 17 23:59:12 2024 +0530
+
+    initail commit - working on the recursive descent parser

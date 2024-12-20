@@ -4,6 +4,7 @@ import java.util.List;
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     public boolean Mode_REPL = false;
+    private Environment environment = new Environment();
 
     class RuntimeError extends RuntimeException
     {
@@ -38,6 +39,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return null;
     }
 
+    
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt)
     {
@@ -53,6 +55,19 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         System.out.println(stringify(val));
         return null;
     }
+
+    @Override 
+    public Void visitVarStmt(Stmt.Var stmt)
+    {
+        Object value = null;
+        if(stmt.intializer != null)
+        {
+            value = evaluate(stmt.intializer);
+        }
+        environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+
 
     @Override
     public Object visitLiteralExpr(Expr.Literal expr)
@@ -156,6 +171,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         else return evaluate(expr.TrueBranch);
 
     }
+
+    @Override 
+    public Object visitVariableExpr(Expr.Variable expr)
+    {
+        return environment.get(expr.name);
+    }
+
     private boolean isEqual(Object left, Object right)
     {
         if(left == null && right == null)return true;
