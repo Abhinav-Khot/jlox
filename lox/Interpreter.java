@@ -3,6 +3,8 @@ import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
+    public boolean Mode_REPL = false;
+
     class RuntimeError extends RuntimeException
     {
         final Token token;
@@ -14,8 +16,9 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         }
     }
 
-    void interpret(List<Stmt> statements)
+    void interpret(List<Stmt> statements, boolean repl_mode)
     {
+        this.Mode_REPL = repl_mode;
         try 
         {
             for(Stmt statement : statements)
@@ -38,7 +41,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt)
     {
-        evaluate(stmt.expression);
+        if(Mode_REPL)System.out.println(stringify(evaluate(stmt.expression)));
+        else evaluate(stmt.expression);
         return null;
     }
 
