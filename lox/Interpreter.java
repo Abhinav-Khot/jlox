@@ -29,7 +29,28 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return null;
     }
 
-    
+    @Override
+    public Void visitBlockStmt(Stmt.Block stmt)
+    {
+        executeBlock(stmt.Statements, new Environment(environment));
+        return null;
+    }    
+
+    public void executeBlock(List<Stmt> statements, Environment env)
+    {
+        Environment previous = this.environment;
+        try{
+            this.environment = env;
+            for(Stmt statement : statements)
+            {
+                execute(statement);
+            }
+        }
+        finally
+        {
+            this.environment = previous; //restore the previous(enclosing) environment after the block is finished executing
+        }
+    }
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt)
     {
@@ -58,12 +79,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return null;
     }
 
+
     @Override 
     public Object visitAssignExpr(Expr.Assign expr)
     {
         Object val = evaluate(expr.value);
-        environment.get(expr.name); // make shift solution for assigning using the prexisting functions. handles errors too. Ideally should define a new fucntion in environment, too lazy for now.(TODO)
-        environment.define(expr.name.lexeme, val);
+        environment.assign(expr.name, val);
         return val; //assignment in Lox is an expression so it returns the value being assigned. (Could be useful in chain assignment like a = b = c = 5). (Note : Python treats assignments like statements so no value is returned). btw python somehow manages to do chain assignment even without treating assignment like an expression.
     }
 

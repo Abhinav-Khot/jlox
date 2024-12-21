@@ -61,7 +61,10 @@ class Parser
     private Stmt statement()
     {
         if(match(PRINT)) return printStatement();
-
+        if(match(LEFT_BRACE))
+        {
+            return new Stmt.Block(block());
+        }
         return expressionStatement();
     }
 
@@ -77,6 +80,18 @@ class Parser
         Expr val = expression();
         consume(SEMICOLON, "Expected ';' at the end");
         return new Stmt.Expression(val);
+    }
+
+    private List<Stmt> block()
+    {
+        List<Stmt> statements = new ArrayList<>();
+        while(!check(RIGHT_BRACE) && !isAtEnd())
+        {
+          statements.add(declaration());
+        }
+
+        consume(RIGHT_BRACE, "Expected '}' after the block");
+        return statements;
     }
 
     private Expr expression()
