@@ -6,16 +6,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     public boolean Mode_REPL = false;
     private Environment environment = new Environment();
 
-    class RuntimeError extends RuntimeException
-    {
-        final Token token;
-
-        RuntimeError(Token token, String message)
-        {
-            super(message);
-            this.token = token;
-        }
-    }
 
     void interpret(List<Stmt> statements, boolean repl_mode)
     {
@@ -66,6 +56,15 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         }
         environment.define(stmt.name.lexeme, value);
         return null;
+    }
+
+    @Override 
+    public Object visitAssignExpr(Expr.Assign expr)
+    {
+        Object val = evaluate(expr.value);
+        environment.get(expr.name); // make shift solution for assigning using the prexisting functions. handles errors too. Ideally should define a new fucntion in environment, too lazy for now.(TODO)
+        environment.define(expr.name.lexeme, val);
+        return val; //assignment in Lox is an expression so it returns the value being assigned. (Could be useful in chain assignment like a = b = c = 5). (Note : Python treats assignments like statements so no value is returned). btw python somehow manages to do chain assignment even without treating assignment like an expression.
     }
 
 

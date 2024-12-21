@@ -81,7 +81,28 @@ class Parser
 
     private Expr expression()
     {
-        return ternary();
+        return assignment();
+    }
+
+    private Expr assignment()
+    {
+        Expr expr = ternary();
+
+        if(match(EQUAL))
+        {
+            Token equals_symbol = previous();
+            Expr value = assignment(); //assignment is right associative, thats why we do right recursion here
+
+            if(expr instanceof Expr.Variable)
+            {
+                Token name = ((Expr.Variable)expr).name;
+                return new Expr.Assign(name, value);
+            }
+
+            error(equals_symbol, "Invalid assignment target."); //the thing we are trying to assign a value to is not a variable
+        }
+
+        return expr;
     }
 
     private Expr ternary() // grammar rule ternary --> equality (? exquality : ternary)*, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
@@ -173,7 +194,7 @@ class Parser
           consume(RIGHT_PAREN, "Expect ')' after expression.");
           return new Expr.Grouping(expr);
         }
-        
+
         if(match(IDENTIFIER)) return new Expr.Variable(previous());
 
         throw error(peek(), "Expects an expression.");
