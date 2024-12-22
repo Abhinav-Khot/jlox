@@ -79,6 +79,20 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return null;
     }
 
+    @Override
+    public Void visitIfStmt(Stmt.If stmt)
+    {
+        boolean truth;
+        Object cond = evaluate(stmt.condition);
+        if(cond == null)truth = false;
+        else if(cond instanceof Boolean) truth = (boolean)cond;
+        else truth = true;
+        if(truth) execute(stmt.trueBranch);
+        else if(stmt.falseBranch != null) execute(stmt.falseBranch);
+
+        return null;
+    }
+
 
     @Override 
     public Object visitAssignExpr(Expr.Assign expr)
@@ -203,7 +217,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         if(left == null && right == null)return true;
         if(left == null || right == null)return false;
 
-        return left.equals(right);
+        return left.equals(right); //by default Object.equals() compares if they are the same Object, but subclasses of Object like String and Double override this method to compare the contents of the instances.
     }
 
     private void checkNumberOperand(Token operator, Object operand) {

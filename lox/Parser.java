@@ -65,6 +65,10 @@ class Parser
         {
             return new Stmt.Block(block());
         }
+        if(match(IF))
+        {
+            return If();
+        }
         return expressionStatement();
     }
 
@@ -92,6 +96,22 @@ class Parser
 
         consume(RIGHT_BRACE, "Expected '}' after the block");
         return statements;
+    }
+
+    private Stmt If()
+    {
+       consume(LEFT_PAREN, "Expected '(' after if");
+       Expr condition = expression();
+       consume(RIGHT_PAREN, "Expected ')' at the end of if condition");
+
+       Stmt trueBranch = statement();
+       Stmt falseBranch = null;
+       if(match(ELSE))
+       {
+          falseBranch = statement();
+       }
+
+       return new Stmt.If(condition, trueBranch, falseBranch);
     }
 
     private Expr expression()
