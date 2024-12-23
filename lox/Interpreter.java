@@ -51,6 +51,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             this.environment = previous; //restore the previous(enclosing) environment after the block is finished executing
         }
     }
+    
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt)
     {
@@ -90,6 +91,17 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         if(truth) execute(stmt.trueBranch);
         else if(stmt.falseBranch != null) execute(stmt.falseBranch);
 
+        return null;
+    }
+
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt)
+    {
+        this.Mode_REPL = false;
+        while(isTruthy(evaluate(stmt.condition)))
+        {
+            execute(stmt.body);
+        }
         return null;
     }
 

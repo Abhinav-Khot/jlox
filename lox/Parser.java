@@ -1,6 +1,7 @@
 package lox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static lox.TokenType.*;
@@ -69,6 +70,14 @@ class Parser
         {
             return If();
         }
+        if(match(WHILE))
+        {
+            return While();
+        }
+        if(match(FOR))
+        {
+            return For();
+        }
         return expressionStatement();
     }
 
@@ -112,6 +121,66 @@ class Parser
        }
 
        return new Stmt.If(condition, trueBranch, falseBranch);
+    }
+
+    private Stmt While()
+    {
+        consume(LEFT_PAREN, "Expected '(' after 'while'");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expected ')' after the condition");
+        Stmt stmt = statement();
+
+        return new Stmt.While(condition, stmt);
+    }
+
+    private Stmt For()
+    {
+        //we basically "desugar" the for loop into a while loop
+        consume(LEFT_PAREN, "Expected '(' after 'for'");
+        Stmt initializer;
+        if(match(SEMICOLON))
+        {
+            initializer = null;
+        }
+        else if(match(VAR))
+        {
+            initializer = varDeclaration();
+        }
+        else
+        {
+            initializer = expressionStatement();
+        }
+
+        Expr condition = null;
+        if(!check(SEMICOLON))
+        {
+            condition = expression();
+        }
+        consume(SEMICOLON, "Expected ; after loop condition");
+
+        Expr increment = null;
+        if(!check(SEMICOLON))
+        {
+            increment = expression();
+        }
+        consume(RIGHT_PAREN, "Expected ')' after for clauses");
+
+        Stmt body = statement();
+
+        if(increment != null)
+        {
+            body = new Stmt.Block(Arrays.asList(body, new Stmt.Expression(increment))); //basically append the increment condition to the end of the loop body TODO: In repl mode we enabled printing the value of expressions typed by println value of any expression statemnts in repl mode, but due to this for loops in repl mode prints the result of increment since variable assignment in lox is a expression
+        }
+
+        if(condition == null) condition = new Expr.Literal(true);
+        body = new Stmt.While(condition, body); //add the loop condition to the beginning of the loop body
+
+        if(initializer != null) //run the intiliazer condition if any once before the while loop starts running
+        {
+            body = new Stmt.Block(Arrays.asList(initializer, body));
+        }
+
+        return body;
     }
 
     private Expr expression()
@@ -166,7 +235,7 @@ class Parser
 
             return new Expr.Logical(expr, operator, right);
         }
-        
+
         return expr;
     }
     private Expr ternary() // grammar rule ternary --> equality (? exquality : ternary)*, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
