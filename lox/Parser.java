@@ -121,7 +121,7 @@ class Parser
 
     private Expr assignment()
     {
-        Expr expr = ternary();
+        Expr expr = or();
 
         if(match(EQUAL))
         {
@@ -140,6 +140,35 @@ class Parser
         return expr;
     }
 
+    private Expr or()
+    {
+        Expr expr = and();
+
+        if(match(OR))
+        {
+            Token operator = previous();
+            Expr right = and();
+            
+            return new Expr.Logical(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    private Expr and()
+    {
+        Expr expr = ternary();
+
+        if(match(AND))
+        {
+            Token operator = previous();
+            Expr right = ternary();
+
+            return new Expr.Logical(expr, operator, right);
+        }
+        
+        return expr;
+    }
     private Expr ternary() // grammar rule ternary --> equality (? exquality : ternary)*, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
     {
        Expr expr = equality();

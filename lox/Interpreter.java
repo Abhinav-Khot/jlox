@@ -110,6 +110,25 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     }
 
     @Override
+    public Object visitLogicalExpr(Expr.Logical expr)
+    {
+        //lox and, or returns an Object with the the appropriate truth value(true or false) not true or false itself. The implementation is made accordingly.
+        //for eg : 1 or 2 returns 1. nil and 2 returns nil.
+        Object left = evaluate(expr.left);
+
+        if(expr.operator.type == TokenType.OR)
+        {
+            if(isTruthy(left)) return left; //short circuit - if one is true then whole OR expression is true
+        }
+        else
+        {
+            if(!isTruthy(left)) return left; // short circuit - if one is false then whole AND expression is false
+        }
+
+        return evaluate(expr.right);
+    }
+
+    @Override
     public Object visitGroupingExpr(Expr.Grouping expr)
     {
         return evaluate(expr.expression);
@@ -241,6 +260,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             return printed;
         }
         return val.toString();
+    }
+
+    private boolean isTruthy(Object obj)
+    {
+        boolean ret;
+        if(obj == null) ret = false;
+        else if(obj instanceof Boolean) ret = (boolean)obj;
+        else ret = true;
+
+        return ret;
     }
 
 }
