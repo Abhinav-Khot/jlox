@@ -97,10 +97,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     @Override
     public Void visitWhileStmt(Stmt.While stmt)
     {
+        boolean prev = this.Mode_REPL; //we dont want expressionstatements inside a while body to be printed in REPL Mode(Note that even assignments in Lox are expression so it was causing an issue where the increment/decrement was also being printed in REPL mode, this is a fix to that issue)
+        this.Mode_REPL = false;
         while(isTruthy(evaluate(stmt.condition)))
         {
             execute(stmt.body);
         }
+        this.Mode_REPL = prev;
         return null;
     }
 
