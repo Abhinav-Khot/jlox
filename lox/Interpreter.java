@@ -97,7 +97,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     @Override
     public Void visitWhileStmt(Stmt.While stmt)
     {
-        this.Mode_REPL = false;
         while(isTruthy(evaluate(stmt.condition)))
         {
             execute(stmt.body);
