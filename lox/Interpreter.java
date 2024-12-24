@@ -21,6 +21,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         {
             Lox.runtimeError(Err);
         }
+        catch(BreakError Err)
+        {
+            Lox.runtimeError(Err);
+        }
     }
 
     private Void execute(Stmt stmt)
@@ -99,14 +103,25 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     {
         boolean prev = this.Mode_REPL; //we dont want expressionstatements inside a while body to be printed in REPL Mode(Note that even assignments in Lox are expression so it was causing an issue where the increment/decrement was also being printed in REPL mode, this is a fix to that issue)
         this.Mode_REPL = false;
-        while(isTruthy(evaluate(stmt.condition)))
+        try{
+            while(isTruthy(evaluate(stmt.condition)))
+            {
+                execute(stmt.body);
+            }
+        }
+        catch(BreakError err)
         {
-            execute(stmt.body);
+            //do nothing lol
         }
         this.Mode_REPL = prev;
         return null;
     }
 
+    @Override
+    public Void visitBreakStmt(Stmt.Break stmt)
+    {
+        throw new BreakError(stmt.breakToken);
+    }
 
     @Override 
     public Object visitAssignExpr(Expr.Assign expr)
@@ -194,11 +209,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
                 return (double)left / (double)right;
 
             case PLUS: //TODO : concantenation of a number with a string causes even the leading .0 to be present, remove that eg : 8 + b = 8.0b
+
+            //note that java is statically typed, even if we know left is a String we still cast it to String because at compile time, java just sees left as an 'Object'.
+
                 if(left instanceof String && right instanceof String) return (String)left + (String)right; //even if one of the operators is a string, concatenate them
                 
                 if(left instanceof Double && right instanceof Double) return (double)left + (double)right; //add only if both are double
 
-                if(left instanceof String && right instanceof Double) return (String)left + right.toString();
+                if(left instanceof String && right instanceof Double) return (String)left + right.toString(); 
 
                 if(left instanceof Double && right instanceof String) return left.toString() + (String)right;
                 

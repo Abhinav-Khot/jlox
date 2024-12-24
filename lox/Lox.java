@@ -53,7 +53,7 @@ public class Lox {
     Scanner scanner = new Scanner(source);
     List<Token> tokens = scanner.scanTokens();
 
-    Parser parser = new Parser(tokens);
+    Parser parser = new Parser(tokens, repl_mode);
     List<Stmt> statements = parser.parse();
 
     // Stop if there was a syntax error.
@@ -81,6 +81,11 @@ public class Lox {
   }
 
   static void runtimeError(RuntimeError error) {
+    System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
+    hadRuntimeError = true;
+  }
+
+  static void runtimeError(BreakError error) {
     System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
     hadRuntimeError = true;
   }

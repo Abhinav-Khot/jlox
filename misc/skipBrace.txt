@@ -1,0 +1,66 @@
+=============To be reviewed later=========================
+
+
+//the below snippet causes an error to be reported that no closing rightbrace is present even though it is actually present
+
+while(true)
+{
+    
+        print 1;
+        break
+}
+
+//if fixed with the (isAtEnd() condition to consume the right brace (in block())), in the below snippet error that no closing rightbrace is present is not reported. 
+
+while(true)
+{
+    
+        print 1;
+        break
+
+//the above fix also doesnt address issues like in the below snippet.
+
+while(true)
+{
+        print 1;
+        break
+}
+for(var a = 1; a > 0 ; a = a - 1)print a;
+
+//in the above it is reported that there is no closing brace even with the fix even thought its obviously there.
+
+//the following cant be avoided at the moment at least, so atleast lets consider right braces as boundaries after advance() through the first one in synchronize() [otherwise we end up in an infinite recursion]
+//atleast it will stop cascading errors in code like :
+
+{
+        {
+                {
+                        {
+                                {
+                                        break
+                                }
+                        }
+                }
+        }
+}
+
+//here just one missing closing brace is reported instead of 4, well it is still wrong but atleast a better compromise then letting it cascade and report 4 missing braces.
+
+//Additional : Now that I see, if the user has a snippet like:
+
+{
+        {
+                {
+                        {
+                                {
+                                        break
+                                }
+                        }
+                }
+        }
+}}
+
+//Firstly only error for missing semicolon would be reported and then when he runs again then the " Error at '}': Expects an expression " would be reported. This is perfectly fine since the user is given a nice path to debug.
+
+//Also added left brace as a boundary for similar errors
+

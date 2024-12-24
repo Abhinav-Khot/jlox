@@ -13,10 +13,12 @@ class Parser
 
     private final List<Token> tokens;
     private int current = 0;
+    private boolean Repl_Mode;
 
-    Parser(List<Token> tokens)
+    Parser(List<Token> tokens, boolean repl_mode)
     {
         this.tokens = tokens;
+        this.Repl_Mode = repl_mode;
     }
 
     List<Stmt> parse() {
@@ -34,7 +36,6 @@ class Parser
     {
         try{
           if(match(VAR)) return varDeclaration();
-          
           return statement(); 
         }
         catch(ParseError error)
@@ -54,7 +55,6 @@ class Parser
         {
             intializer = expression();
         }
-
         consume(SEMICOLON, "Expect ';' after variable declaration");
         return new Stmt.Var(name, intializer);
     }
@@ -78,6 +78,10 @@ class Parser
         {
             return For();
         }
+        if(match(BREAK))
+        {
+            return breakStatement();
+        }
         return expressionStatement();
     }
 
@@ -91,6 +95,10 @@ class Parser
     private Stmt expressionStatement()
     {
         Expr val = expression();
+        if(Repl_Mode)
+        {
+            if(!check(SEMICOLON)) return new Stmt.Expression(val);
+        }
         consume(SEMICOLON, "Expected ';' at the end");
         return new Stmt.Expression(val);
     }
@@ -102,7 +110,6 @@ class Parser
         {
           statements.add(declaration());
         }
-
         consume(RIGHT_BRACE, "Expected '}' after the block");
         return statements;
     }
@@ -181,6 +188,13 @@ class Parser
         }
 
         return body;
+    }
+
+    private Stmt breakStatement()
+    {
+        Token breakTok = previous();
+        consume(SEMICOLON, "Expected ';' after 'break'");
+        return new Stmt.Break(breakTok);
     }
 
     private Expr expression()
@@ -399,6 +413,8 @@ class Parser
             case WHILE:
             case PRINT:
             case RETURN:
+            case LEFT_BRACE:
+            case RIGHT_BRACE: //TODO : check and review misc/skipRightBrace.txt
               return;
           }
     
