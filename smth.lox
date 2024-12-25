@@ -1,0 +1,6 @@
+fun skibidi()
+{
+    print "toilet";
+}
+
+skibidi();

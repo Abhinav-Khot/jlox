@@ -5,7 +5,7 @@ import java.util.List;
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     public boolean Mode_REPL = false;
-    private final Environment globals = new Environment();
+    final Environment globals = new Environment();
     private Environment environment = globals;
 
     Interpreter()
@@ -57,6 +57,26 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return null;
     }
 
+    @Override 
+    public Void visitVarStmt(Stmt.Var stmt)
+    {
+        Object value = null;
+        if(stmt.intializer != null)
+        {
+            value = evaluate(stmt.intializer);
+        }
+        environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionStmt(Stmt.Function stmt)
+    {
+        LoxFunction function = new LoxFunction(stmt);   
+        environment.define(stmt.name.lexeme, function);
+        return null;
+    }
+
     @Override
     public Void visitBlockStmt(Stmt.Block stmt)
     {
@@ -96,17 +116,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return null;
     }
 
-    @Override 
-    public Void visitVarStmt(Stmt.Var stmt)
-    {
-        Object value = null;
-        if(stmt.intializer != null)
-        {
-            value = evaluate(stmt.intializer);
-        }
-        environment.define(stmt.name.lexeme, value);
-        return null;
-    }
 
     @Override
     public Void visitIfStmt(Stmt.If stmt)
@@ -287,14 +296,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return environment.get(expr.name);
     }
 
-    private boolean isEqual(Object left, Object right)
-    {
-        if(left == null && right == null)return true;
-        if(left == null || right == null)return false;
-
-        return left.equals(right); //by default Object.equals() compares if they are the same Object, but subclasses of Object like String and Double override this method to compare the contents of the instances.
-    }
-
     @Override
     public Object visitCallExpr(Expr.Call expr)
     {
@@ -319,6 +320,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             throw new RuntimeError(expr.paren, "Expected " + function.arity() + " arguments but got" + args.size() + " .");
         }
         return function.call(this, args);
+    }
+
+    private boolean isEqual(Object left, Object right)
+    {
+        if(left == null && right == null)return true;
+        if(left == null || right == null)return false;
+
+        return left.equals(right); //by default Object.equals() compares if they are the same Object, but subclasses of Object like String and Double override this method to compare the contents of the instances.
     }
 
 

@@ -11,6 +11,7 @@ abstract class Stmt {
     R visitVarStmt(Var stmt);
     R visitWhileStmt(While stmt);
     R visitBreakStmt(Break stmt);
+    R visitFunctionStmt(Function stmt);
   }
   static class Block extends Stmt {
     Block(List<Stmt> Statements) {
@@ -103,6 +104,22 @@ abstract class Stmt {
     }
 
     final Token breakToken;
+  }
+  static class Function extends Stmt {
+    Function(Token name, List<Token> parameters, List<Stmt> body) {
+      this.name = name;
+      this.parameters = parameters;
+      this.body = body;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitFunctionStmt(this);
+    }
+
+    final Token name;
+    final List<Token> parameters;
+    final List<Stmt> body;
   }
 
   abstract <R> R accept(Visitor<R> visitor);
