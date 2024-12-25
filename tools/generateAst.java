@@ -22,7 +22,8 @@ public class generateAst {
         "Logical  : Expr left, Token operator, Expr right",
         "Unary    : Token operator, Expr right",
         "Ternary  : Expr Condition, Expr TrueBranch, Expr FalseBranch",
-        "Variable      : Token name"
+        "Variable : Token name",
+        "Call     : Expr calee, Token paren, List<Expr> arguments" //paren will be used to store token of right parenthesis, would be uselful for error reporting
         ));
 
         defineAst(outputDir, "Stmt", Arrays.asList(

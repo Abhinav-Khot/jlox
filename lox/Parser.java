@@ -324,7 +324,23 @@ class Parser
           return new Expr.Unary(operator, right);
         }
     
-        return primary();
+        return call();
+    }
+
+    private Expr call()
+    {
+        Expr expr = primary();
+
+        while(true)
+        {
+            if(match(LEFT_PAREN))
+            {
+                expr = finishCall(expr);
+            }
+            else break;
+        }
+
+        return expr;
     }
 
     private Expr primary() {
@@ -346,6 +362,25 @@ class Parser
 
         throw error(peek(), "Expects an expression.");
       }
+
+    private Expr finishCall(Expr callee)
+    {
+        List<Expr> args = new ArrayList<>();
+
+        while(!check(RIGHT_PAREN))
+        {
+            do
+            {
+                if(args.size() >= 255) error(peek(), "Cannot have more than 255 arguments.");
+                args.add(expression());
+            }
+            while(match(COMMA));
+        }
+
+        Token paren = consume(RIGHT_PAREN, "Expected ')' after arguments.");
+
+        return new Expr.Call(callee, paren, args);
+    }
 
     private boolean match(TokenType... types)
     {

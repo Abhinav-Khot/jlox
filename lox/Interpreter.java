@@ -1,11 +1,35 @@
 package lox;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     public boolean Mode_REPL = false;
-    private Environment environment = new Environment();
+    private final Environment globals = new Environment();
+    private Environment environment = globals;
 
+    Interpreter()
+    {
+        globals.define("clock", new LoxCallable() {
+            @Override
+            public int arity()
+            {
+                return 0;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments)
+            {
+                return (double)System.currentTimeMillis() / 1000.0;
+            }
+
+            @Override
+            public String toString()
+            {
+                return "<native fn>"; 
+            }
+        });
+    }
 
     void interpret(List<Stmt> statements, boolean repl_mode)
     {
@@ -270,6 +294,33 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
         return left.equals(right); //by default Object.equals() compares if they are the same Object, but subclasses of Object like String and Double override this method to compare the contents of the instances.
     }
+
+    @Override
+    public Object visitCallExpr(Expr.Call expr)
+    {
+        Object callee = evaluate(expr.calee);
+
+        List<Object>args = new ArrayList<>();
+
+        for(Expr expresssion : expr.arguments)
+        {
+            args.add(evaluate(expresssion));
+        }
+
+        if(!(callee instanceof LoxCallable))
+        {
+            throw new RuntimeError(expr.paren, "Can only call functions and classes.");
+        }
+
+        LoxCallable function = (LoxCallable) callee; //Again, java is statically typed, so even though we know callee is already of type LoxCallable, we still have to cast it to not get a compile time error.
+        
+        if(args.size() != function.arity())
+        {
+            throw new RuntimeError(expr.paren, "Expected " + function.arity() + " arguments but got" + args.size() + " .");
+        }
+        return function.call(this, args);
+    }
+
 
     private void checkNumberOperand(Token operator, Object operand) {
         if (operand instanceof Double) return;
