@@ -20,6 +20,28 @@ public class Environment {
         values.put(name, val);
     }
 
+    Object getAt(Integer distance, String name)
+    {
+        Environment environment = this;
+        for(int i = 0; i < distance; i ++)
+        {
+            environment = environment.enclosing;
+        }
+
+        return environment.values.get(name);
+    }
+
+    void assignAt(Integer distance, Token name, Object value)
+    {
+        Environment environment = this;
+        for(int i = 0; i < distance; i ++)
+        {
+            environment = environment.enclosing;
+        }
+
+        environment.values.put(name.lexeme, value);
+    }
+
     Object get(Token name)
     {
         if(values.containsKey(name.lexeme))

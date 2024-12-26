@@ -59,6 +59,11 @@ public class Lox {
     // Stop if there was a syntax error.
     if (hadError) return;
 
+    Resolver resolver = new Resolver(interpreter);
+    resolver.resolve(statements);
+
+    if(hadError) return;
+    
     interpreter.interpret(statements, repl_mode);
   }
 
@@ -85,13 +90,4 @@ public class Lox {
     hadRuntimeError = true;
   }
 
-  static void runtimeError(Break error) {
-    System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
-    hadRuntimeError = true;
-  }
-
-  static void runtimeError(Return error) {
-    System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
-    hadRuntimeError = true;
-  }
 }

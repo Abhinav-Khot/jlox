@@ -1,2 +1,10 @@
-var a = 7 == 9 ? fun () {return "idk";} : fun () {return "works";};
-print(a());
+var a = "global";
+{
+  fun showA() {
+    print a;
+  }
+
+  showA();
+  var a = "block";
+  showA();
+}

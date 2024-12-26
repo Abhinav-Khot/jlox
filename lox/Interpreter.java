@@ -1,12 +1,15 @@
 package lox;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     public boolean Mode_REPL = false;
     final Environment globals = new Environment();
     private Environment environment = globals;
+    private final Map<Expr, Integer> locals = new HashMap<>();
 
     Interpreter()
     {
@@ -45,14 +48,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         {
             Lox.runtimeError(Err);
         }
-        catch(Break Err)
-        {
-            Lox.runtimeError(Err);
-        }
-        catch(Return err)
-        {
-            Lox.runtimeError(err);
-        }
     }
 
     private Void execute(Stmt stmt)
@@ -60,6 +55,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         stmt.accept(this);
         return null;
     }
+
+    void resolve(Expr expr, int depth)
+    {
+        locals.put(expr, depth);    
+    }
+
 
     @Override 
     public Void visitVarStmt(Stmt.Var stmt)
@@ -176,7 +177,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     public Object visitAssignExpr(Expr.Assign expr)
     {
         Object val = evaluate(expr.value);
-        environment.assign(expr.name, val);
+        Integer distance = locals.get(expr);
+        if(distance != null)
+        {
+            environment.assignAt(distance, expr.name, val);
+        }
+        else
+        {
+            globals.assign(expr.name, val);
+        }
+        
         return val; //assignment in Lox is an expression so it returns the value being assigned. (Could be useful in chain assignment like a = b = c = 5). (Note : Python treats assignments like statements so no value is returned). btw python somehow manages to do chain assignment even without treating assignment like an expression.
     }
 
@@ -309,7 +319,17 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     @Override 
     public Object visitVariableExpr(Expr.Variable expr)
     {
-        return environment.get(expr.name);
+        return lookUpVariable(expr.name, expr);
+    }
+
+    private Object lookUpVariable(Token name, Expr expr)
+    {
+        Integer distance = locals.get(expr);
+        if(distance != null)
+        {
+            return environment.getAt(distance, name.lexeme);
+        }
+        return globals.get(name);
     }
 
     @Override
