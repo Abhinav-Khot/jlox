@@ -13,6 +13,7 @@ abstract class Expr {
     R visitTernaryExpr(Ternary expr);
     R visitVariableExpr(Variable expr);
     R visitCallExpr(Call expr);
+    R visitAnonymousFunctionExpr(AnonymousFunction expr);
   }
   static class Assign extends Expr {
     Assign(Token name, Expr value) {
@@ -141,6 +142,20 @@ abstract class Expr {
     final Expr calee;
     final Token paren;
     final List<Expr> arguments;
+  }
+  static class AnonymousFunction extends Expr {
+    AnonymousFunction(List<Token> parameters, List<Stmt> body) {
+      this.parameters = parameters;
+      this.body = body;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitAnonymousFunctionExpr(this);
+    }
+
+    final List<Token> parameters;
+    final List<Stmt> body;
   }
 
   abstract <R> R accept(Visitor<R> visitor);

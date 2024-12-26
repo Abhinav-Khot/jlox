@@ -1,6 +1,2 @@
-fun skibidi()
-{
-    print "toilet";
-}
-
-skibidi();
+var a = 7 == 9 ? fun () {return "idk";} : fun () {return "works";};
+print(a());

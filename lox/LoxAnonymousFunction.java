@@ -1,11 +1,12 @@
 package lox;
+
 import java.util.List;
 
-public class LoxFunction implements LoxCallable {
-    private final Stmt.Function declaration;
+public class LoxAnonymousFunction implements LoxCallable{
+    private final Expr.AnonymousFunction declaration;
     private final Environment closure;
 
-    LoxFunction(Stmt.Function decl, Environment closure)
+    LoxAnonymousFunction(Expr.AnonymousFunction decl, Environment closure)
     {
         this.declaration = decl;
         this.closure = closure;
@@ -40,6 +41,6 @@ public class LoxFunction implements LoxCallable {
     @Override
     public String toString()
     {
-        return "<fn " + declaration.name.lexeme + " >";
-    }
+        return "Anonymous function";
+    }    
 }

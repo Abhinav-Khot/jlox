@@ -109,6 +109,10 @@ class Parser
         {
             return breakStatement();
         }
+        if(match(RETURN))
+        {
+            return returnStatement();
+        }
         return expressionStatement();
     }
 
@@ -224,6 +228,18 @@ class Parser
         return new Stmt.Break(breakTok);
     }
 
+    private Stmt returnStatement()
+    {
+        Token keyword = previous();
+        Expr value = null;
+        if(!check(SEMICOLON))
+        {
+            value = expression();
+        }
+        consume(SEMICOLON, "Expected ';' after return value.");
+        return new Stmt.Return(keyword, value);
+    }
+
     private Expr expression()
     {
         return assignment();
@@ -231,7 +247,7 @@ class Parser
 
     private Expr assignment()
     {
-        Expr expr = or();
+        Expr expr = ternary();
 
         if(match(EQUAL))
         {
@@ -248,6 +264,19 @@ class Parser
         }
 
         return expr;
+    }
+
+    private Expr ternary() // grammar rule ternary --> or (? or : ternary)*, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
+    {
+       Expr expr = or();
+       if(match(QUESTION_MARK))
+       {
+          Expr trueBranch = or();
+          consume(COLON, ": Must be accompanied with the ? (else condition not specified)");
+          Expr falseBranch = ternary();
+          return new Expr.Ternary(expr, trueBranch, falseBranch);
+       }
+       return expr;
     }
 
     private Expr or()
@@ -267,7 +296,7 @@ class Parser
 
     private Expr and()
     {
-        Expr expr = ternary();
+        Expr expr = anonymousFunction();
 
         if(match(AND))
         {
@@ -279,18 +308,35 @@ class Parser
 
         return expr;
     }
-    private Expr ternary() // grammar rule ternary --> equality (? exquality : ternary)*, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
+
+    private Expr anonymousFunction()
     {
-       Expr expr = equality();
-       if(match(QUESTION_MARK))
-       {
-          Expr trueBranch = equality();
-          consume(COLON, ": Must be accompanied with the ? (else condition not specified)");
-          Expr falseBranch = ternary();
-          return new Expr.Ternary(expr, trueBranch, falseBranch);
-       }
-       return expr;
+        if(match(FUN))
+        {
+            consume(LEFT_PAREN, "Expected '(' afer 'fun'.");
+            List<Token> parameters = new ArrayList<>();
+
+            if(!check(RIGHT_PAREN))
+            {
+                do{
+                    if(parameters.size() >= 255)
+                    {
+                        error(peek(), "Cannot have more than 255 parameters.");
+                    }
+                    parameters.add(consume(IDENTIFIER, "Expected parameter name."));
+                }
+                while(match(COMMA));
+            }    
+
+            consume(RIGHT_PAREN, "Expected ')' after parameters.");
+            consume(LEFT_BRACE, "Expected '{' before function body.");
+            List<Stmt> body = block();
+            return new Expr.AnonymousFunction(parameters, body);
+        }
+
+        return equality();
     }
+
 
     private Expr equality()
     {

@@ -1,9 +1,9 @@
 package lox;
 
-public class BreakError extends RuntimeException {
+public class Break extends RuntimeException {
     final Token token;
     
-    BreakError(Token breakToken)
+    Break(Token breakToken)
     {
         super("break statement cannot be used outside a loop.");
         this.token = breakToken;

@@ -45,9 +45,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         {
             Lox.runtimeError(Err);
         }
-        catch(BreakError Err)
+        catch(Break Err)
         {
             Lox.runtimeError(Err);
+        }
+        catch(Return err)
+        {
+            Lox.runtimeError(err);
         }
     }
 
@@ -72,10 +76,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     @Override
     public Void visitFunctionStmt(Stmt.Function stmt)
     {
-        LoxFunction function = new LoxFunction(stmt);   
+        LoxFunction function = new LoxFunction(stmt, environment);   
         environment.define(stmt.name.lexeme, function);
         return null;
-    }
+    }   
 
     @Override
     public Void visitBlockStmt(Stmt.Block stmt)
@@ -142,7 +146,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
                 execute(stmt.body);
             }
         }
-        catch(BreakError err)
+        catch(Break err)
         {
             //do nothing lol
         }
@@ -153,7 +157,19 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     @Override
     public Void visitBreakStmt(Stmt.Break stmt)
     {
-        throw new BreakError(stmt.breakToken);
+        throw new Break(stmt.breakToken);
+    }
+
+    @Override 
+    public Void visitReturnStmt(Stmt.Return stmt)
+    {
+        Object value = null;
+        if(stmt.value != null)
+        {
+            value = evaluate(stmt.value);
+        }
+
+        throw new Return(value, stmt.keyword);
     }
 
     @Override 
@@ -322,6 +338,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return function.call(this, args);
     }
 
+    @Override
+    public Object visitAnonymousFunctionExpr(Expr.AnonymousFunction expr)
+    {
+        LoxAnonymousFunction function = new LoxAnonymousFunction(expr, environment);   
+        return function;   
+    }
+
     private boolean isEqual(Object left, Object right)
     {
         if(left == null && right == null)return true;
@@ -343,7 +366,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     }
 
     private String stringify(Object val)
-    {
+    {   
         if(val == null)return "nil";
         if(val instanceof Double) //cosmetic to remove trailing .0
         {

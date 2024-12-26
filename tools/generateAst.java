@@ -23,7 +23,8 @@ public class generateAst {
         "Unary    : Token operator, Expr right",
         "Ternary  : Expr Condition, Expr TrueBranch, Expr FalseBranch",
         "Variable : Token name",
-        "Call     : Expr calee, Token paren, List<Expr> arguments" //paren will be used to store token of right parenthesis, would be uselful for error reporting
+        "Call     : Expr calee, Token paren, List<Expr> arguments", //paren will be used to store token of right parenthesis, would be uselful for error reporting
+        "AnonymousFunction : List<Token> parameters, List<Stmt> body"   
         ));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
@@ -34,7 +35,8 @@ public class generateAst {
         "Var        : Token name, Expr intializer",
         "While      : Expr condition, Stmt body",
         "Break      : Token breakToken",
-        "Function   : Token name, List<Token> parameters, List<Stmt> body"
+        "Function   : Token name, List<Token> parameters, List<Stmt> body",
+        "Return     : Token keyword, Expr value" //keyword stores the 'break' token, it will be useful for error reporting.
         ));
       }
 
