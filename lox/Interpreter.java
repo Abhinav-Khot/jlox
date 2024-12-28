@@ -91,6 +91,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
     public void executeBlock(List<Stmt> statements, Environment env)
     {
+        boolean prev = this.Mode_REPL; //we dont want expressionstatements inside blocks to be printed in repl mode
+        this.Mode_REPL = false;
         Environment previous = this.environment;
         try{
             this.environment = env;
@@ -102,6 +104,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         finally
         {
             this.environment = previous; //restore the previous(enclosing) environment after the block is finished executing
+            this.Mode_REPL = prev;
         }
     }
     

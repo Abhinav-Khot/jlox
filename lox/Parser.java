@@ -207,7 +207,7 @@ class Parser
 
         if(increment != null)
         {
-            body = new Stmt.Block(Arrays.asList(body, new Stmt.Expression(increment))); //basically append the increment condition to the end of the loop body TODO: In repl mode we enabled printing the value of expressions typed by println value of any expression statemnts in repl mode, but due to this for loops in repl mode prints the result of increment since variable assignment in lox is a expression
+            body = new Stmt.Block(Arrays.asList(body, new Stmt.Expression(increment))); //basically append the increment condition to the end of the loop body
         }
 
         if(condition == null) condition = new Expr.Literal(true);

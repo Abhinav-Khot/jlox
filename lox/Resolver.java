@@ -18,7 +18,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
 
     private enum FunctionType
     {
-        NONE, WHILE, FOR, FUNCTION
+        NONE, FUNCTION, ANONYMOUSFUNCTION
     }
 
     void resolve(Stmt stmt)
@@ -252,7 +252,10 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     @Override
     public Void visitAnonymousFunctionExpr(Expr.AnonymousFunction expr)
     {
+        FunctionType prev = currFuntion;
+        currFuntion = FunctionType.ANONYMOUSFUNCTION;
         resolveFunction(expr);
+        currFuntion = prev;
         return null;
     }
 
