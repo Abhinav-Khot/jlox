@@ -9,6 +9,7 @@ abstract class Stmt {
     R visitIfStmt(If stmt);
     R visitPrintStmt(Print stmt);
     R visitVarStmt(Var stmt);
+    R visitClassStmt(Class stmt);
     R visitWhileStmt(While stmt);
     R visitBreakStmt(Break stmt);
     R visitFunctionStmt(Function stmt);
@@ -79,6 +80,20 @@ abstract class Stmt {
 
     final Token name;
     final Expr intializer;
+  }
+  static class Class extends Stmt {
+    Class(Token name , List<Stmt.Function> methods) {
+      this.name = name;
+      this.methods = methods;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitClassStmt(this);
+    }
+
+    final Token name ;
+    final List<Stmt.Function> methods;
   }
   static class While extends Stmt {
     While(Expr condition, Stmt body) {

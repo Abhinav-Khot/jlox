@@ -37,6 +37,7 @@ class Parser
         try{
           if(match(VAR)) return varDeclaration();
           if(match(FUN)) return function("function");
+          if(match(CLASS))return classDeclaration();
           return statement(); 
         }
         catch(ParseError error)
@@ -60,7 +61,7 @@ class Parser
         return new Stmt.Var(name, intializer);
     }
 
-    private Stmt function(String kind)
+    private Stmt.Function function(String kind)
     {
         Token name = consume(IDENTIFIER, "Expected " + kind + " name.");
         consume(LEFT_PAREN, "Expected '(' after " + kind + " name.");
@@ -84,6 +85,24 @@ class Parser
         List<Stmt> body = block();
 
         return new Stmt.Function(name, parameters, body);
+    }
+
+    private Stmt classDeclaration()
+    {
+        Token name = consume(IDENTIFIER, "Expected name for the class.");
+        consume(LEFT_BRACE, "Expected '{' before the class body.");
+
+        List<Stmt.Function> methods = new ArrayList<>();
+
+        while(!check(RIGHT_BRACE) && !isAtEnd())
+        {
+            methods.add(function("method"));
+
+        }
+
+        consume(RIGHT_BRACE, "Expected '}' after the class body.");
+
+        return new Stmt.Class(name, methods);
     }
 
     private Stmt statement()
@@ -197,7 +216,7 @@ class Parser
         consume(SEMICOLON, "Expected ; after loop condition");
 
         Expr increment = null;
-        if(!check(SEMICOLON))
+        if(!check(RIGHT_PAREN))
         {
             increment = expression();
         }
@@ -258,6 +277,11 @@ class Parser
             {
                 Token name = ((Expr.Variable)expr).name;
                 return new Expr.Assign(name, value);
+            }
+            if(expr instanceof Expr.Get)
+            {
+                Expr.Get get = (Expr.Get)expr;
+                return new Expr.Set(get.object, get.name , value);  
             }
 
             error(equals_symbol, "Invalid assignment target."); //the thing we are trying to assign a value to is not a variable
@@ -410,6 +434,11 @@ class Parser
             {
                 expr = finishCall(expr);
             }
+            else if(match(DOT))
+            {
+                Token name = consume(IDENTIFIER, "Expected property name after '.'");
+                expr = new Expr.Get(expr, name);
+            }
             else break;
         }
 
@@ -430,7 +459,7 @@ class Parser
           consume(RIGHT_PAREN, "Expect ')' after expression.");
           return new Expr.Grouping(expr);
         }
-
+        if(match(THIS)) return new Expr.This(previous());
         if(match(IDENTIFIER)) return new Expr.Variable(previous());
 
         throw error(peek(), "Expects an expression.");

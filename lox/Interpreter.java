@@ -177,6 +177,20 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     }
 
     @Override 
+    public Void visitClassStmt(Stmt.Class stmt)
+    {
+        Map<String, LoxFunction> methods = new HashMap<>();
+
+        for(Stmt.Function method : stmt.methods)
+        {
+            LoxFunction func = new LoxFunction(method, environment);
+            methods.put(method.name.lexeme, func);
+        }
+        environment.define(stmt.name.lexeme, new LoxClass(stmt.name.lexeme, methods));
+        return null;
+    }
+
+    @Override 
     public Object visitAssignExpr(Expr.Assign expr)
     {
         Object val = evaluate(expr.value);
@@ -359,6 +373,39 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             throw new RuntimeError(expr.paren, "Expected " + function.arity() + " arguments but got" + args.size() + " .");
         }
         return function.call(this, args);
+    }
+
+    @Override
+    public Object visitGetExpr(Expr.Get expr)
+    {
+        Object object = evaluate(expr.object);
+        if(object instanceof LoxInstance)
+        {
+            return ((LoxInstance) object).get(expr.name);
+        }
+
+        throw new RuntimeError(expr.name, "Only instances have properties.");
+    }
+
+    @Override
+    public Object visitSetExpr(Expr.Set expr)
+    {
+        Object object = evaluate(expr.object);
+
+        if(!(object instanceof LoxInstance))
+        {
+            throw new RuntimeError(expr.name, "Only instances have fields.");
+        }
+
+        Object val = evaluate(expr.value);
+        ((LoxInstance) object).set(expr.name, val);
+        return val; //similar to regular variable assignment we return the value being assigned.
+    }
+    
+    @Override
+    public Object visitThisExpr(Expr.This expr)
+    {
+        return lookUpVariable(expr.keyword, expr);
     }
 
     @Override

@@ -9,6 +9,8 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     private final Interpreter interpreter;
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
     private FunctionType currFuntion = FunctionType.NONE;
+    private ClassType currClass = ClassType.NONE;
+
     private boolean inLoop = false;
 
     Resolver(Interpreter interpreter)
@@ -18,7 +20,12 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
 
     private enum FunctionType
     {
-        NONE, FUNCTION, ANONYMOUSFUNCTION
+        NONE, FUNCTION, ANONYMOUSFUNCTION, METHOD, INITIALIZER
+    }
+
+    private enum ClassType
+    {
+        NONE, CLASS
     }
 
     void resolve(Stmt stmt)
@@ -116,7 +123,27 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
         resolve(function.body);
         endScope();
         currFuntion = enclosing;
-    }    
+    }   
+    
+    @Override
+    public Void visitClassStmt(Stmt.Class stmt)
+    {
+        ClassType prev = this.currClass;
+        this.currClass = ClassType.CLASS; //to detect invalid uses of 'this'
+        declare(stmt.name);
+        define(stmt.name);
+        beginScope();
+        scopes.peek().put("this", true);
+        for(Stmt.Function method : stmt.methods)
+        {
+            FunctionType declaration = FunctionType.METHOD;
+            if(method.name.lexeme.equals("init")) declaration = FunctionType.INITIALIZER;
+            resolveFunction(method, declaration);
+        }
+        endScope();
+        this.currClass = prev;
+        return null;    
+    }
     
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt)
@@ -159,8 +186,17 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
         if(currFuntion == FunctionType.NONE) 
         {
             Lox.error(stmt.keyword, "Cannot return from top-level code.");
+            return null; //return is not at the right location, why continue resolving the expression to be returned? This is a design choice.
         }
-        if(stmt.value != null) resolve(stmt.value);
+        if(stmt.value != null) 
+        {
+            if(currFuntion == FunctionType.INITIALIZER)
+            {
+                Lox.error(stmt.keyword, "Cannot return a value from an initializer.");
+                return null; //return in a intitialiser shouldnt have any value, so we dont care about reporting any resoluutionerrors in the expression that the user has specified to be returned. Again a design choice.
+            }
+            resolve(stmt.value);
+        }
         return null;
     }
 
@@ -196,6 +232,17 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
             return;
           }
         }
+    }
+
+    @Override
+    public Void visitThisExpr(Expr.This expr)
+    {
+        if(currClass == ClassType.NONE){
+            Lox.error(expr.keyword, "Cannot use 'this' outside a class.");
+            return null;    
+        }
+        resolveLocal(expr, expr.keyword);
+        return null;
     }
 
     @Override
@@ -256,6 +303,20 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
         currFuntion = FunctionType.ANONYMOUSFUNCTION;
         resolveFunction(expr);
         currFuntion = prev;
+        return null;
+    }
+
+    @Override
+    public Void visitGetExpr(Expr.Get expr) {
+      resolve(expr.object);
+      return null;
+    }  
+
+    @Override
+    public Void visitSetExpr(Expr.Set expr)
+    {
+        resolve(expr.object);
+        resolve(expr.value);
         return null;
     }
 

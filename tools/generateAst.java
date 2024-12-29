@@ -23,7 +23,10 @@ public class generateAst {
         "Unary    : Token operator, Expr right",
         "Ternary  : Expr Condition, Expr TrueBranch, Expr FalseBranch",
         "Variable : Token name",
+        "This     : Token keyword",
         "Call     : Expr calee, Token paren, List<Expr> arguments", //paren will be used to store token of right parenthesis, would be uselful for error reporting
+        "Get      : Expr object, Token name",
+        "Set      : Expr object, Token name, Expr value",
         "AnonymousFunction : List<Token> parameters, List<Stmt> body"   
         ));
 
@@ -33,6 +36,7 @@ public class generateAst {
         "If : Expr condition, Stmt trueBranch, Stmt falseBranch",
         "Print      : Expr expression",
         "Var        : Token name, Expr intializer",
+        "Class      : Token name , List<Stmt.Function> methods",
         "While      : Expr condition, Stmt body",
         "Break      : Token breakToken",
         "Function   : Token name, List<Token> parameters, List<Stmt> body",

@@ -25,10 +25,17 @@ public class LoxFunction implements LoxCallable {
             interpreter.executeBlock(declaration.body, environment);
         }
         catch(Return ret)
-        {
+        {   
             return ret.value;
         }
         return null;
+    }
+
+    LoxFunction bind(LoxInstance instance)
+    {
+        Environment env = new Environment(closure);
+        env.define("this", instance);
+        return new LoxFunction(declaration, env);
     }
 
     @Override
@@ -38,8 +45,8 @@ public class LoxFunction implements LoxCallable {
     }
 
     @Override
-    public String toString()
+    public String toString() //toSting() is a fucntion provided by the Object class in java which is the superclass of all classes. So we can override it even though LoxCallable doesnt have it.
     {
-        return "<fn " + declaration.name.lexeme + " >";
+        return "<fn " + declaration.name.lexeme + ">";
     }
 }

@@ -1,10 +1,21 @@
-var a = "global";
+class joemama
 {
-  fun showA() {
-    print a;
-  }
+    hello()
+    {
+        this.name = "hello";
+        print "hello!";
+    }
 
-  showA();
-  var a = "block";
-  showA();
+    init()
+    {
+        this.default = 90;
+        return;
+        print 5;
+    }
 }
+
+var MyMama = joemama();
+
+MyMama.hello();
+
+print MyMama.default;
