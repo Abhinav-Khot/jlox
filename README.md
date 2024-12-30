@@ -10,7 +10,7 @@ A Java interpreter for the Lox programming language.
 
 ### Compile
 
-```shell
+```console
 make
 ```
 
@@ -18,7 +18,7 @@ Compiles source files into the `bin` directory.
 
 ### Start REPL
 
-```shell
+```console
 make run
 ```
 
@@ -26,7 +26,7 @@ Launches interactive REPL mode for Lox.
 
 ### Run Script
 
-```shell
+```console
 make run FILE=path/to/script.lox
 ```
 
@@ -34,7 +34,7 @@ Executes a Lox script file.
 
 ### Clean Build
 
-```shell
+```console
 make clean
 ```
 
@@ -48,13 +48,13 @@ If you prefer not to use Make, you can build and run manually:
 
 ### Create Build Directory
 
-```shell
+```console
 mkdir bin
 ```
 
 ### Compile Source
 
-```shell
+```console
 javac -d bin lox/*.java
 ```
 
@@ -62,7 +62,7 @@ Compiles all Java files from the `lox` directory into `bin`.
 
 ### Start REPL
 
-```shell
+```console
 java -cp bin lox.Lox
 ```
 
@@ -70,7 +70,7 @@ Launches interactive Lox interpreter.
 
 ### Run Script
 
-```shell
+```console
 java -cp bin lox.Lox path/to/script.lox
 ```
 
