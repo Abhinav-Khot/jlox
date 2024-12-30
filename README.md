@@ -34,20 +34,24 @@ make clean
 
 ## Run without make
 
+```
+mkdir bin
+```
+
 ### Compile
 
 ```
-javac lox/*.java
+javac -d bin lox/*.java
 ```
 
 ### Run REPL
 
 ```
-java lox.Lox
+java -cp bin lox.Lox
 ```
 
 ### Run Script
 
 ```
-java lox.Lox path/to/script.lox
+java -cp bin lox.Lox path/to/script.lox
 ```
