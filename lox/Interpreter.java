@@ -180,13 +180,26 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     public Void visitClassStmt(Stmt.Class stmt)
     {
         Map<String, LoxFunction> methods = new HashMap<>();
-
+        Object superclass = null;
+        if(stmt.superclass != null)
+        {
+            superclass = evaluate(stmt.superclass);
+            if(!(superclass instanceof LoxClass))
+            {
+                throw new RuntimeError(stmt.superclass.name, "A class can only inherit from another class.(Superclass must be a class)");
+            }
+            environment = new Environment(environment); //for handling super.
+            environment.define("super", superclass);
+        }
         for(Stmt.Function method : stmt.methods)
         {
             LoxFunction func = new LoxFunction(method, environment);
             methods.put(method.name.lexeme, func);
         }
-        environment.define(stmt.name.lexeme, new LoxClass(stmt.name.lexeme, methods));
+
+        if(superclass != null) environment = environment.enclosing;
+
+        environment.define(stmt.name.lexeme, new LoxClass(stmt.name.lexeme, (LoxClass)superclass,  methods));
         return null;
     }
 
@@ -406,6 +419,22 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     public Object visitThisExpr(Expr.This expr)
     {
         return lookUpVariable(expr.keyword, expr);
+    }
+
+    @Override 
+    public Object visitSuperExpr(Expr.Super expr)
+    {
+        int distance = locals.get(expr);
+        LoxClass superclass = (LoxClass) environment.getAt(distance, "super");
+        LoxInstance object = (LoxInstance) environment.getAt(distance - 1, "this"); //'this' is always one environment inside 'super' due to our structure.
+
+        LoxFunction method = superclass.findMethod(expr.method.lexeme);
+        if(method != null)
+        {
+            return method.bind(object);
+        }
+        
+        throw new RuntimeError(expr.method, "Undefined property " + expr.method.lexeme + " .");
     }
 
     @Override

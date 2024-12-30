@@ -1,21 +1,19 @@
-class joemama
-{
-    hello()
-    {
-        this.name = "hello";
-        print "hello!";
-    }
-
-    init()
-    {
-        this.default = 90;
-        return;
-        print 5;
-    }
+class A {
+  method() {
+    print "A method";
+  }
 }
 
-var MyMama = joemama();
+class B < A {
+  method() {
+    print "B method";
+  }
 
-MyMama.hello();
+  test() {
+    super.method();
+  }
+}
 
-print MyMama.default;
+class C < B {}
+
+C().test();

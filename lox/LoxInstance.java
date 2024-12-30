@@ -17,7 +17,9 @@ public class LoxInstance {
         if(fields.containsKey(name.lexeme)) return fields.get(name.lexeme);
 
         LoxFunction method = klass.findMethod(name.lexeme);
+
         if(name.lexeme.equals("init")) throw new RuntimeError(name, "Initializer cannot be invoked explicitly after instance has been constructed."); //we dont want users to invoke init() on their own
+        
         if(method != null) return method.bind(this);
 
         else throw new RuntimeError(name, "Undefined Property '" + name.lexeme + "'.");
