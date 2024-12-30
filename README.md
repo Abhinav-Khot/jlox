@@ -66,7 +66,7 @@ Compiles all Java files from the `lox` directory into `bin`.
 java -cp bin lox.Lox
 ```
 
-Launches interactive Lox interpreter.
+Launches interactive REPL mode for Lox.
 
 ### Run Script
 
