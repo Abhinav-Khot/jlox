@@ -1,6 +1,6 @@
 # Lox Interpreter
 
-A Java implementation of the Lox programming language.
+A Java interpreter for the Lox programming language.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ A Java implementation of the Lox programming language.
 
 ### Compile
 
-```bash
+```shell
 make
 ```
 
@@ -18,7 +18,7 @@ Compiles source files into the `bin` directory.
 
 ### Start REPL
 
-```bash
+```shell
 make run
 ```
 
@@ -26,7 +26,7 @@ Launches interactive REPL mode for Lox.
 
 ### Run Script
 
-```bash
+```shell
 make run FILE=path/to/script.lox
 ```
 
@@ -34,7 +34,7 @@ Executes a Lox script file.
 
 ### Clean Build
 
-```bash
+```shell
 make clean
 ```
 
@@ -48,13 +48,13 @@ If you prefer not to use Make, you can build and run manually:
 
 ### Create Build Directory
 
-```bash
+```shell
 mkdir bin
 ```
 
 ### Compile Source
 
-```bash
+```shell
 javac -d bin lox/*.java
 ```
 
@@ -62,7 +62,7 @@ Compiles all Java files from the `lox` directory into `bin`.
 
 ### Start REPL
 
-```bash
+```shell
 java -cp bin lox.Lox
 ```
 
@@ -70,7 +70,7 @@ Launches interactive Lox interpreter.
 
 ### Run Script
 
-```bash
+```shell
 java -cp bin lox.Lox path/to/script.lox
 ```
 
