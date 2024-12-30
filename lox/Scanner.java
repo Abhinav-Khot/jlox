@@ -151,7 +151,10 @@ class Scanner {
                     advance();
         }
 
-        if(isAtEnd()) Lox.error(line, "String is not terminated.");
+        if(isAtEnd()){
+            Lox.error(line, "String is not terminated.");
+            return;
+        }
 
         String val = source.substring(start + 1, current);
 

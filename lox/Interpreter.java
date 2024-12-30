@@ -411,6 +411,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         }
 
         Object val = evaluate(expr.value);
+        
         ((LoxInstance) object).set(expr.name, val);
         return val; //similar to regular variable assignment we return the value being assigned.
     }

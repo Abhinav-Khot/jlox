@@ -10,4 +10,4 @@ public class Break extends RuntimeException {
     }
 }
 
-//basically we throw a BreakError when we encounter a break, if this break is in a loop it is caught
+//basically we throw a Break when we encounter a break, if this break is in a loop it is caught outside effectively exiting the loop.
