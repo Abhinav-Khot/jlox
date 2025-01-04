@@ -82,10 +82,11 @@ abstract class Stmt {
     final Expr intializer;
   }
   static class Class extends Stmt {
-    Class(Token name , Expr.Variable superclass, List<Stmt.Function> methods) {
+    Class(Token name , Expr.Variable superclass, List<Stmt.Function> methods, List<Stmt.Function> staticmethods) {
       this.name = name;
       this.superclass = superclass;
       this.methods = methods;
+      this.staticmethods = staticmethods;
     }
 
     @Override
@@ -96,6 +97,7 @@ abstract class Stmt {
     final Token name ;
     final Expr.Variable superclass;
     final List<Stmt.Function> methods;
+    final List<Stmt.Function> staticmethods;
   }
   static class While extends Stmt {
     While(Expr condition, Stmt body) {

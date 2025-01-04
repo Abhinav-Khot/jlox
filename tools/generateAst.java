@@ -37,7 +37,7 @@ public class generateAst {
         "If : Expr condition, Stmt trueBranch, Stmt falseBranch",
         "Print      : Expr expression",
         "Var        : Token name, Expr intializer",
-        "Class      : Token name , Expr.Variable superclass, List<Stmt.Function> methods",
+        "Class      : Token name , Expr.Variable superclass, List<Stmt.Function> methods, List<Stmt.Function> staticmethods",
         "While      : Expr condition, Stmt body",
         "Break      : Token breakToken",
         "Function   : Token name, List<Token> parameters, List<Stmt> body",

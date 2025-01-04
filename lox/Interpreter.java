@@ -180,6 +180,8 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     public Void visitClassStmt(Stmt.Class stmt)
     {
         Map<String, LoxFunction> methods = new HashMap<>();
+        Map<String, LoxFunction> staticmethods = new HashMap<>();
+
         Object superclass = null;
         if(stmt.superclass != null)
         {
@@ -196,10 +198,15 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             LoxFunction func = new LoxFunction(method, environment);
             methods.put(method.name.lexeme, func);
         }
+        for(Stmt.Function staticmethod : stmt.staticmethods)
+        {
+            LoxFunction func = new LoxFunction(staticmethod, environment);
+            staticmethods.put(staticmethod.name.lexeme, func);
+        }
 
         if(superclass != null) environment = environment.enclosing;
 
-        environment.define(stmt.name.lexeme, new LoxClass(stmt.name.lexeme, (LoxClass)superclass,  methods));
+        environment.define(stmt.name.lexeme, new LoxClass(stmt.name.lexeme, (LoxClass)superclass,  methods, staticmethods));
         return null;
     }
 
@@ -434,7 +441,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         {
             return method.bind(object);
         }
-        
+        LoxFunction staticmethod = superclass.get(expr.method);
+        if(staticmethod  != null)
+        {
+            return staticmethod;
+        }
         throw new RuntimeError(expr.method, "Undefined property " + expr.method.lexeme + " .");
     }
 

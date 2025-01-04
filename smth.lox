@@ -1,19 +1,40 @@
-class A {
-  method() {
-    print "A method";
-  }
+class sigma
+{
+    method()
+    {
+      this.val = 18;
+    }
+
+    static somethingelse()
+    {
+        print "success!";
+    }
 }
 
-class B < A {
-  method() {
-    print "B method";
-  }
-
-  test() {
+class skibidi < sigma
+{
+  init()
+  {
     super.method();
+    this.value = 19;
+  }
+
+  static something()
+  {
+     print 1;
   }
 }
 
-class C < B {}
+var a = skibidi();
 
-C().test();
+a.method();
+
+print a.val;
+
+skibidi.something();
+
+skibidi().something();
+
+sigma.somethingelse();
+
+//super is dissalowed in static methods similar to java.

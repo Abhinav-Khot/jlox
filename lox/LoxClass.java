@@ -4,14 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class LoxClass implements LoxCallable{
+class LoxClass extends LoxInstance implements LoxCallable{
   final String name;
   final Map<String, LoxFunction> methods;
+  final Map<String, LoxFunction> staticMethods;
   final LoxClass superclass;
 
-  LoxClass(String name, LoxClass superclass, Map<String, LoxFunction> methods) {
+  LoxClass(String name, LoxClass superclass, Map<String, LoxFunction> methods, Map<String, LoxFunction> staticMethods) {
+    super(null);
     this.name = name;
     this.methods = methods;
+    this.staticMethods = staticMethods;
     this.superclass = superclass;
   }
 
@@ -23,6 +26,13 @@ class LoxClass implements LoxCallable{
             return superclass.findMethod(name);
         }
         return null;
+  }
+
+  LoxFunction get(Token name) //to handle static method calls
+  {
+      if(staticMethods.containsKey(name.lexeme)) return staticMethods.get(name.lexeme);
+
+      throw new RuntimeError(name, "static method '" + name.lexeme + "' does not exist");
   }
 
   @Override

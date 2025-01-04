@@ -20,7 +20,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
 
     private enum FunctionType
     {
-        NONE, FUNCTION, ANONYMOUSFUNCTION, METHOD, INITIALIZER
+        NONE, FUNCTION, ANONYMOUSFUNCTION, METHOD, INITIALIZER, STATICMETHOD
     }
 
     private enum ClassType
@@ -143,6 +143,11 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
             beginScope(); //for handling 'super'.
             scopes.peek().put("super", true);
         }
+        for(Stmt.Function staticmethod : stmt.staticmethods)
+        {
+            FunctionType declaration = FunctionType.STATICMETHOD;
+            resolveFunction(staticmethod, declaration);
+        }
         beginScope();
         scopes.peek().put("this", true);
         for(Stmt.Function method : stmt.methods)
@@ -253,6 +258,10 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
             Lox.error(expr.keyword, "Cannot use 'this' outside a class.");
             return null;    
         }
+        if(currFuntion == FunctionType.STATICMETHOD)
+        {
+            Lox.error(expr.keyword, "Cannot use 'this' inside a static method.");
+        }
         resolveLocal(expr, expr.keyword);
         return null;
     }
@@ -342,6 +351,10 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
         else if(currClass != ClassType.SUBCLASS)
         {
             Lox.error(expr.keyword, "Cannot use 'super' if class does not have a superclass.");
+        }
+        else if(currFuntion == FunctionType.STATICMETHOD)
+        {
+            Lox.error(expr.keyword, "Cannot use 'super' in a static method."); //We stick to java style where super cannot be used in a static context.
         }
         resolveLocal(expr, expr.keyword);
         return null;

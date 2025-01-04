@@ -10,7 +10,7 @@ public class LoxInstance {
     LoxInstance(LoxClass klass)
     {
         this.klass = klass;
-        }
+    }
 
     Object get(Token name)
     {
@@ -21,6 +21,9 @@ public class LoxInstance {
         if(name.lexeme.equals("init")) throw new RuntimeError(name, "Initializer cannot be invoked explicitly after instance has been constructed."); //we dont want users to invoke init() on their own
         
         if(method != null) return method.bind(this);
+
+        LoxFunction staticMethod = klass.get(name);
+        if(staticMethod != null) return staticMethod; //Lox allows calling static methods through instances for now.
 
         else throw new RuntimeError(name, "Undefined Property '" + name.lexeme + "'.");
     }
