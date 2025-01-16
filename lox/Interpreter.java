@@ -32,6 +32,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
                 return "<native fn>"; 
             }
         });
+
     }
 
     void interpret(List<Stmt> statements, boolean repl_mode)
@@ -47,6 +48,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         catch(RuntimeError Err)
         {
             Lox.runtimeError(Err);
+        }
+        catch(NativeError err)
+        {
+            Lox.NativeError(err);
         }
     }
 
@@ -441,11 +446,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         {
             return method.bind(object);
         }
+        
         LoxFunction staticmethod = superclass.get(expr.method);
         if(staticmethod  != null)
         {
             return staticmethod;
         }
+
         throw new RuntimeError(expr.method, "Undefined property " + expr.method.lexeme + " .");
     }
 
@@ -464,6 +471,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return left.equals(right); //by default Object.equals() compares if they are the same Object, but subclasses of Object like String and Double override this method to compare the contents of the instances.
     }
 
+    @Override
+    public Object visitArrayExpr(Expr.Array expr)
+    {
+        List<Object> elements = new ArrayList<>();
+        for(Expr x : expr.elements)
+        {
+            elements.add(evaluate(x));
+        }
+
+        return new LoxArray(elements);
+    }
+
 
     private void checkNumberOperand(Token operator, Object operand) {
         if (operand instanceof Double) return;
@@ -476,7 +495,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         throw new RuntimeError(operator, "Operands must be numbers.");
     }
 
-    private String stringify(Object val)
+    public static String stringify(Object val)
     {   
         if(val == null)return "nil";
         if(val instanceof Double) //cosmetic to remove trailing .0

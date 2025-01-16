@@ -360,6 +360,16 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
         return null;
     }
 
+    @Override
+    public Void visitArrayExpr(Expr.Array expr)
+    {
+        for(Expr element : expr.elements)
+        {
+            resolve(element);
+        }
+        return null;
+    }
+
     private void resolveFunction(Expr.AnonymousFunction function) {
         beginScope();
         for (Token param : function.parameters) {

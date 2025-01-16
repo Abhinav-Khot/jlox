@@ -55,10 +55,31 @@ class Parser
 
         if(match(EQUAL))
         {
-            intializer = expression();
+            if(match(LEFT_BRACKET))
+            {
+                intializer = arrayinit();
+            }
+            else intializer = expression();
         }
         consume(SEMICOLON, "Expect ';' after variable declaration");
         return new Stmt.Var(name, intializer);
+    }
+
+    private Expr.Array arrayinit()
+    {
+        List<Expr> elements = new ArrayList<>();
+        while(!check(RIGHT_BRACKET))
+        {
+            do
+            {
+                elements.add(expression());
+            }
+            while(match(COMMA));
+        }
+
+        consume(RIGHT_BRACKET, "Expected ']' after array elements.");
+
+        return new Expr.Array(elements);
     }
 
     private Stmt.Function function(String kind)
@@ -428,11 +449,10 @@ class Parser
           Expr right = unary();
           return new Expr.Unary(operator, right);
         }
-    
-        return call();
+        return call_or_access();
     }
 
-    private Expr call()
+    private Expr call_or_access()
     {
         Expr expr = primary();
 
@@ -446,6 +466,10 @@ class Parser
             {
                 Token name = consume(IDENTIFIER, "Expected property name after '.'");
                 expr = new Expr.Get(expr, name);
+            }
+            else if(match(LEFT_BRACKET)) //for array index access.
+            {
+                
             }
             else break;
         }
@@ -476,7 +500,7 @@ class Parser
             return new Expr.Super(keyword, method);
         }
         if(match(IDENTIFIER)) return new Expr.Variable(previous());
-
+        if(match(LEFT_BRACKET)) return arrayinit(); //for arrays
         throw error(peek(), "Expects an expression.");
       }
 

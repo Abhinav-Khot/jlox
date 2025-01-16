@@ -18,6 +18,7 @@ abstract class Expr {
     R visitGetExpr(Get expr);
     R visitSetExpr(Set expr);
     R visitAnonymousFunctionExpr(AnonymousFunction expr);
+    R visitArrayExpr(Array expr);
   }
   static class Assign extends Expr {
     Assign(Token name, Expr value) {
@@ -216,6 +217,18 @@ abstract class Expr {
 
     final List<Token> parameters;
     final List<Stmt> body;
+  }
+  static class Array extends Expr {
+    Array(List<Expr> elements) {
+      this.elements = elements;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitArrayExpr(this);
+    }
+
+    final List<Expr> elements;
   }
 
   abstract <R> R accept(Visitor<R> visitor);

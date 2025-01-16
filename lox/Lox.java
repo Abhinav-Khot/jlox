@@ -91,5 +91,10 @@ public class Lox {
     System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
     hadRuntimeError = true;
   }
+  
+  static void NativeError(NativeError error) {
+    System.err.println(error.getMessage());
+    hadRuntimeError = true;
+  }
 
 }

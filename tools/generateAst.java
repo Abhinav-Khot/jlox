@@ -28,7 +28,8 @@ public class generateAst {
         "Call     : Expr calee, Token paren, List<Expr> arguments", //paren will be used to store token of right parenthesis, would be uselful for error reporting
         "Get      : Expr object, Token name",
         "Set      : Expr object, Token name, Expr value",
-        "AnonymousFunction : List<Token> parameters, List<Stmt> body"   
+        "AnonymousFunction : List<Token> parameters, List<Stmt> body" ,
+        "Array    : List<Expr> elements" 
         ));
 
         defineAst(outputDir, "Stmt", Arrays.asList(

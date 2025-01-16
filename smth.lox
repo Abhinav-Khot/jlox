@@ -1,40 +1,5 @@
-class sigma
-{
-    method()
-    {
-      this.val = 18;
-    }
+var a = clock();
 
-    static somethingelse()
-    {
-        print "success!";
-    }
-}
+for(var i = 0; i < 1000000; i = i + 1){}
 
-class skibidi < sigma
-{
-  init()
-  {
-    super.method();
-    this.value = 19;
-  }
-
-  static something()
-  {
-     print 1;
-  }
-}
-
-var a = skibidi();
-
-a.method();
-
-print a.val;
-
-skibidi.something();
-
-skibidi().something();
-
-sigma.somethingelse();
-
-//super is dissalowed in static methods similar to java.
+print clock() - a;
