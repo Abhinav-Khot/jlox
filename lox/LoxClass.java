@@ -32,7 +32,7 @@ class LoxClass extends LoxInstance implements LoxCallable{
   {
       if(staticMethods.containsKey(name.lexeme)) return staticMethods.get(name.lexeme);
 
-      throw new RuntimeError(name, "static method '" + name.lexeme + "' does not exist");
+      throw new RuntimeError(name, "Undefined propery'" + name.lexeme + "' .");
   }
 
   @Override
