@@ -1,0 +1,30 @@
+class Math{
+    init()
+    {
+        print "math module initialized";
+    }
+
+    static square(a){
+         return a * a;
+    }
+
+    static min(a, b){
+        if (a < b) return a;
+        return b;
+    }
+
+    static max(a, b){
+        if (a > b) return a;
+        return b;
+    }
+
+    static abs(a){
+        return a > 0 ? a : -a;
+    }
+}
+
+print Math.square(6);
+print Math.min(10, 5);
+print Math.max(782, 37349);
+print Math.abs(-92);
+

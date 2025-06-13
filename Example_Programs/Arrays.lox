@@ -1,0 +1,16 @@
+var a = [1, 2, 3];
+
+a.append(4);
+
+print a;
+
+//all operations using indexes use 0 based indexing
+print a.get(2); 
+
+a.update(2, 10);
+
+print a;
+
+a.remove(1); 
+
+print a;

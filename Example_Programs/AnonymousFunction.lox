@@ -1,0 +1,8 @@
+var fibonacci = fun (a){
+    if (a == 0) return 0;
+    if (a == 1 or a == 2) return 1;
+    
+    return fibonacci(a - 1) + fibonacci(a - 2);
+};
+
+print fibonacci(10);

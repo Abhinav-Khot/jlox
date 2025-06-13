@@ -1,0 +1,15 @@
+class Dog{
+    init(name)
+    {
+        this.name = name;
+    }
+
+    bark()
+    {
+        print this.name + " says Woof!";
+    }
+}
+
+var doggie = Dog("Charlie");
+
+doggie.bark();

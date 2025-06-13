@@ -1,0 +1,14 @@
+fun outer()
+{
+    var x = 10;
+    fun inner()
+    {
+        print x;
+    }
+
+    return inner;
+}
+
+var f = outer();
+
+f(); // the function remembers the environment it was defined in, even if that environment is not active currently.

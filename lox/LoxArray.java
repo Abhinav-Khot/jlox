@@ -63,6 +63,58 @@ public class LoxArray extends LoxInstance{
             };
         
         methods.put("get", get_fn);
+
+        LoxCallable update_fn = 
+            new LoxCallable() {
+            @Override
+            public int arity()
+            {
+                return 2;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments)
+            {
+                if(!(arguments.get(0) instanceof Double) || ((Double) arguments.get(0)) % 1 != 0) throw new NativeError("Indexing is integer-based.");
+                int index = ((Double) arguments.get(0)).intValue();
+                if (index < 0 || index >= elements.size()) throw new NativeError("Index out of bounds.");
+                return elements.set(index, arguments.get(1));
+            }
+
+            @Override
+            public String toString()
+            {
+                return "<native array fn>"; 
+            }
+            };
+
+        methods.put("update", update_fn);
+
+        LoxCallable remove_fn = 
+            new LoxCallable() {
+            @Override
+            public int arity()
+            {
+                return 1;
+            }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments)
+            {
+                if(!(arguments.get(0) instanceof Double) || ((Double) arguments.get(0)) % 1 != 0) throw new NativeError("Indexing is integer-based.");
+                int index = ((Double) arguments.get(0)).intValue();
+                if (index < 0 || index >= elements.size()) throw new NativeError("Index out of bounds.");
+                return elements.remove(index);
+            }
+
+            @Override
+            public String toString()
+            {
+                return "<native array fn>"; 
+            }
+            };
+
+        methods.put("remove", remove_fn);
     }
 
     LoxCallable get(Token name)

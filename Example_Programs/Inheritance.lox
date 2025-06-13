@@ -1,0 +1,43 @@
+class Vehicle{
+    init(name)
+    {
+        this.name = name;
+    }
+
+    forward()
+    {
+        print this.name + " Moves forward";
+    }
+}
+
+class Car < Vehicle{
+    init(name)
+    {
+        super.init(name);
+    }
+    
+    wheels()
+    {
+        print this.name + " Has four wheels";
+    }
+}
+
+class Bike < Vehicle{
+    init(name)
+    {
+        super.init(name);
+    }
+
+    wheels()
+    {
+        print this.name + " Has two wheels";
+    }
+}
+
+var honda = Bike("Honda");
+honda.forward();
+honda.wheels();
+
+var mclaren = Car("McLaren");
+mclaren.forward();
+mclaren.wheels();
