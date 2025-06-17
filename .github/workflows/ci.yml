@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install dependencies
+      - run: |
+          pip install mkdocs-terminal pymdown-extensions
       - name: Configure Git Credentials
         run: |
           git config user.name github-actions[bot]
