@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: pip install mkdocs-terminal pymdown-extensions
       - name: Configure Git Credentials
         run: |
           git config user.name github-actions[bot]
@@ -28,4 +26,6 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install mkdocs-material 
+      - name: Install dependencies
+        run: pip install mkdocs-terminal pymdown-extensions
       - run: mkdocs gh-deploy --force
