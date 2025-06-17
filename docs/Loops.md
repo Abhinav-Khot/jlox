@@ -21,7 +21,7 @@ var a = 0;
 
 while (a < n)
 {
-    digits.append(a * a);
+    squares.append(a * a);
     a = a + 1;
 }
 
