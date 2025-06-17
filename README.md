@@ -1,12 +1,16 @@
 # Lox Interpreter
 
-A Java interpreter for the Lox programming language.
+A Java interpreter for the Lox programming language from Crafting Interpreters.
+
+# Documentation 
+
+The documentation can be found at : https://abhinav-khot.github.io/jlox
 
 ## Prerequisites
 
 - Java JDK 8 or higher
 
-## Using Make
+## Build Using Make
 
 ### Compile
 

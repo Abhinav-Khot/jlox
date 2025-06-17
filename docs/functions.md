@@ -79,4 +79,4 @@ Using `return` outside a function or method throws an error.
 
 ## `clock`
 
-Returns the time elapsed since the program started execution in milliseconds.
+Returns the time elapsed since the program started execution in seconds.

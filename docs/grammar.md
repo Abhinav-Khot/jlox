@@ -19,7 +19,7 @@ varDecl        → "var" IDENTIFIER ( "=" expression )? ";"
 
 
 ```
-statement      → exprStmt | forStmt | ifStmt | printStmt | returnStmt | whileStmt | block ;
+statement      → exprStmt | forStmt | ifStmt | printStmt | returnStmt | whileStmt | breakStmt | block ;
 
 exprStmt       → expression ";" 
 
@@ -30,9 +30,11 @@ ifStmt         → "if" "(" expression ")" statement
 
 printStmt      → "print" expression ";" 
 
-returnStmt     → "return" expression? ";" 
+returnStmt     → "return" expression? ";"
 
 whileStmt      → "while" "(" expression ")" statement 
+
+breakStmt      → "break" ";"
 
 block          → "{" declaration* "}"
 ```
@@ -42,7 +44,7 @@ expression     → assignment ;
 
 assignment     → ( call "." )? IDENTIFIER "=" assignment | ternary
 
-ternary        → logic_or ("?" logic_or ":" ternary)*
+ternary        → logic_or ("?" logic_or ":" ternary)
 
 logic_or       → logic_and ( "or" logic_and )* 
 
