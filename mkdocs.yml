@@ -1,0 +1,20 @@
+site_name: Lox Docs
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.blocks.details:
+      types:
+        - name: info
+          class: terminal-alert
+          title: Info
+        - name: warn
+          class: 'terminal-alert terminal-alert-error'
+          title: Warning
+        - name: important
+          class: 'terminal-alert terminal-alert-primary'
+          title: Important
+
+theme:
+  name: terminal
+  palette: dark
+
