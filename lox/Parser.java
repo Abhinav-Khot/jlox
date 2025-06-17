@@ -319,7 +319,7 @@ class Parser
         return expr;
     }
 
-    private Expr ternary() // grammar rule ternary --> or (? or : ternary)*, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
+    private Expr ternary() // grammar rule ternary --> or "?" or ":" ternary, Notice the beauty : left recursive doesnt work in a recursive descent parsers, but right recusive does ! and ternary is right associative which is implemented by a right recursive rule.
     {
        Expr expr = or();
        if(match(QUESTION_MARK))
