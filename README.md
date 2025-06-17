@@ -2,9 +2,10 @@
 
 A Java interpreter for the Lox programming language.
 
-# Documenation 
+# Documentation 
 
-The documenation can be found at : https://abhinav-khot.github.io/jlox
+The documentation can be found at : https://abhinav-khot.github.io/jlox
+
 ## Prerequisites
 
 - Java JDK 8 or higher
