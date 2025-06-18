@@ -35,7 +35,7 @@ To refer to the current object in the methohds, the keyword `this` can be used. 
 
 The constructor of the class can be defined through `init`. Each of the methods of the classes are defined the same way functions are defined with the only change being that we dont use the `fun` keyword. 
 
-Note that in case of a class having a parent class, when the object for the class is initialized, only the constructor for the base class is called automatically. If one wishes to call the constructor of the parent class, they can do so with `super` . An example of this is shown in the `Inheritance` section.
+Note that in case of a class having a parent class, when the object for the class is initialized, only the constructor for the subclass is called automatically. If one wishes to call the constructor of the parent class, they can do so with `super` . An example of this is shown in the `Inheritance` section.
 
 # Static methods
 
