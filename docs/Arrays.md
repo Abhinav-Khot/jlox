@@ -29,7 +29,7 @@ If index is out of bounds, an error is thrown.
 **Example** :
 ```
 var a = [23, 2, 3];
-print a.get(1); // 23
+print a.get(0); // 23
 ```
     
 ## `update(index, val)`
