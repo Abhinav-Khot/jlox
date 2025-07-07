@@ -125,3 +125,7 @@ print <expression>;
 ```
 print "Hello World";    
 ```
+
+# Comments
+
+Single line comments begin with `//` and multiline comments can be enclosed in `/*` and `*/`.
