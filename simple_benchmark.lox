@@ -1,5 +1,9 @@
-var a = clock();
+class A{
+    smth()
+    {
+        this.name = 5;
+        print this.name;    
+    }
+}
 
-for(var i = 0; i < 1000000; i = i + 1){}
-
-print clock() - a;
+print A().smth();
