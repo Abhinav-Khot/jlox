@@ -1,9 +1,9 @@
 The main structure of lox's grammar is described as follows:
 
 ```
-program        → (declaration)* EOF 
+program        → (declaration)* EOF
 
-declaration    → classDecl | funDecl | varDecl | statement 
+declaration    → classDecl | funDecl | varDecl | statement
 
 classDecl      → "class" IDENTIFIER ("<" IDENTIFIER)?
                  "{" ( ("static")? function)* "}"
@@ -17,22 +17,21 @@ parameters     → IDENTIFIER ("," IDENTIFIER)*
 varDecl        → "var" IDENTIFIER ( "=" expression )? ";"
 ```
 
-
 ```
 statement      → exprStmt | forStmt | ifStmt | printStmt | returnStmt | whileStmt | breakStmt | block ;
 
-exprStmt       → expression ";" 
+exprStmt       → expression ";"
 
-forStmt        → "for" "(" ( varDecl | exprStmt | ";" ) expression? ";" expression? ")" statement 
+forStmt        → "for" "(" ( varDecl | exprStmt | ";" ) expression? ";" expression? ")" statement
 
 ifStmt         → "if" "(" expression ")" statement
-                  ( "else" statement )? 
+                  ( "else" statement )?
 
-printStmt      → "print" expression ";" 
+printStmt      → "print" expression ";"
 
 returnStmt     → "return" expression? ";"
 
-whileStmt      → "while" "(" expression ")" statement 
+whileStmt      → "while" "(" expression ")" statement
 
 breakStmt      → "break" ";"
 
@@ -44,25 +43,25 @@ expression     → assignment ;
 
 assignment     → ( call "." )? IDENTIFIER "=" assignment | ternary
 
-ternary        → logic_or ("?" logic_or ":" ternary)
+ternary        → logic_or ("?" ternary ":" ternary)
 
-logic_or       → logic_and ( "or" logic_and )* 
+logic_or       → logic_and ( "or" logic_and )*
 
-logic_and      → equality ( "and" equality )* 
+logic_and      → equality ( "and" equality )*
 
 anonymous_func → "FUN" function ";" | equality
 
-equality       → comparison ( ( "!=" | "==" ) comparison )* 
+equality       → comparison ( ( "!=" | "==" ) comparison )*
 
-comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* 
+comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )*
 
-term           → factor ( ( "-" | "+" ) factor )* 
+term           → factor ( ( "-" | "+" ) factor )*
 
-factor         → unary ( ( "/" | "*" ) unary )* 
+factor         → unary ( ( "/" | "*" ) unary )*
 
-unary          → ( "!" | "-" ) unary | call 
+unary          → ( "!" | "-" ) unary | call
 
-call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* 
+call           → primary ( "(" arguments? ")" | "." IDENTIFIER )*
 
 primary        → "true" | "false" | "nil" | "this"
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"

@@ -38,7 +38,7 @@ class Parser
           if(match(VAR)) return varDeclaration();
           if(match(FUN)) return function("function");
           if(match(CLASS))return classDeclaration();
-          return statement(); 
+          return statement();
         }
         catch(ParseError error)
         {
@@ -99,7 +99,7 @@ class Parser
                 parameters.add(consume(IDENTIFIER, "Expected parameter name."));
             }
             while(match(COMMA));
-        }    
+        }
 
         consume(RIGHT_PAREN, "Expected ')' after parameters.");
         consume(LEFT_BRACE, "Expected '{' before " + kind + " body.");
@@ -310,7 +310,7 @@ class Parser
             if(expr instanceof Expr.Get)
             {
                 Expr.Get get = (Expr.Get)expr;
-                return new Expr.Set(get.object, get.name , value);  
+                return new Expr.Set(get.object, get.name , value);
             }
 
             error(equals_symbol, "Invalid assignment target."); //the thing we are trying to assign a value to is not a variable
@@ -324,7 +324,7 @@ class Parser
        Expr expr = or();
        if(match(QUESTION_MARK))
        {
-          Expr trueBranch = or();
+          Expr trueBranch = ternary();
           consume(COLON, ": Must be accompanied with the ? (else condition not specified)");
           Expr falseBranch = ternary();
           return new Expr.Ternary(expr, trueBranch, falseBranch);
@@ -340,7 +340,7 @@ class Parser
         {
             Token operator = previous();
             Expr right = and();
-            
+
             return new Expr.Logical(expr, operator, right);
         }
 
@@ -379,7 +379,7 @@ class Parser
                     parameters.add(consume(IDENTIFIER, "Expected parameter name."));
                 }
                 while(match(COMMA));
-            }    
+            }
 
             consume(RIGHT_PAREN, "Expected ')' after parameters.");
             consume(LEFT_BRACE, "Expected '{' before function body.");
@@ -399,7 +399,7 @@ class Parser
             Expr right = comparision();
             expr = new Expr.Binary(expr, operator, right);
           }
-      
+
           return expr;
     }
 
@@ -419,13 +419,13 @@ class Parser
 
     private Expr term() {
         Expr expr = factor();
-    
+
         while (match(MINUS, PLUS)) {
           Token operator = previous();
           Expr right = factor();
           expr = new Expr.Binary(expr, operator, right);
         }
-    
+
         return expr;
     }
 
@@ -469,7 +469,7 @@ class Parser
             }
             else if(match(LEFT_BRACKET)) //for array index access.
             {
-                
+
             }
             else break;
         }
@@ -481,11 +481,11 @@ class Parser
         if (match(FALSE)) return new Expr.Literal(false);
         if (match(TRUE)) return new Expr.Literal(true);
         if (match(NIL)) return new Expr.Literal(null);
-        
+
         if (match(NUMBER, STRING)) {
           return new Expr.Literal(previous().literal);
         }
-    
+
         if (match(LEFT_PAREN)) {
           Expr expr = expression();
           consume(RIGHT_PAREN, "Expect ')' after expression.");
@@ -538,12 +538,12 @@ class Parser
 
     private Token consume(TokenType type, String message) {
         if (check(type)) return advance();
-    
+
         throw error(peek(), message);
     }
 
     private ParseError error(Token token, String message) {
-        Lox.error(token, message);  
+        Lox.error(token, message);
         return new ParseError();
       }
 
@@ -576,10 +576,10 @@ class Parser
 
     private void synchronize() {
         advance();
-    
+
         while (!isAtEnd()) {
           if (previous().type == SEMICOLON) return;
-    
+
           switch (peek().type) {
             case CLASS:
             case FUN:
@@ -593,7 +593,7 @@ class Parser
             case RIGHT_BRACE: //TODO : check and review misc/skipRightBrace.txt
               return;
           }
-    
+
           advance();
         }
     }
