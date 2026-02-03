@@ -35,6 +35,8 @@ whileStmt      → "while" "(" expression ")" statement
 
 breakStmt      → "break" ";"
 
+breakStmt      → "break" ";"
+
 block          → "{" declaration* "}"
 ```
 

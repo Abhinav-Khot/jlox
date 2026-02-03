@@ -20,7 +20,7 @@ print a; // [1, 2, 3, 4]
 ```
 
 ## `get(index)`
-Returns the value at the specified index.
+Returns the value at the specified index. Indexing is 0-based.
 
 ///warn
 If index is out of bounds, an error is thrown.
@@ -33,7 +33,7 @@ print a.get(0); // 23
 ```
     
 ## `update(index, val)`
-Replaces the value at index `index` with `val`.
+Replaces the value at index `index` with `val`. Index is 0-based.
 
 ///warn
 If index is out of bounds, an error is thrown.
