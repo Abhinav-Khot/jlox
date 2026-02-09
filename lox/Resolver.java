@@ -10,13 +10,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
     private FunctionType currFuntion = FunctionType.NONE;
     private ClassType currClass = ClassType.NONE;
-
     private boolean inLoop = false;
-
-    Resolver(Interpreter interpreter)
-    {
-        this.interpreter = interpreter;
-    }
 
     private enum FunctionType
     {
@@ -26,6 +20,19 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     private enum ClassType
     {
         NONE, CLASS, SUBCLASS
+    }
+
+    private enum INNERMOST /*  to avoid scenarios like while() {fun() {break;}} */
+    {
+        NONE, LOOP, FUNC_OR_METHOD
+    }
+
+    private Stack<INNERMOST> currStack = new Stack<>();
+
+    Resolver(Interpreter interpreter)
+    {
+        this.interpreter = interpreter;
+        currStack.push(INNERMOST.NONE); // Dont want an empty stack do we?
     }
 
     void resolve(Stmt stmt)
@@ -58,7 +65,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
 
     private void beginScope()
     {
-        scopes.push(new HashMap<String, Boolean>());    
+        scopes.push(new HashMap<String, Boolean>());
     }
 
     private void endScope()
@@ -92,7 +99,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     private void define(Token name)
     {
         if(scopes.isEmpty())return;
-        scopes.peek().put(name.lexeme, true); 
+        scopes.peek().put(name.lexeme, true);
     }
 
     @Override
@@ -105,13 +112,15 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
 
     @Override
     public Void visitFunctionStmt(Stmt.Function stmt) {
+      currStack.add(INNERMOST.FUNC_OR_METHOD);
       declare(stmt.name);
       define(stmt.name);
 
       resolveFunction(stmt, FunctionType.FUNCTION);
+      currStack.pop();
       return null;
     }
-    
+
     private void resolveFunction(Stmt.Function function, FunctionType type) {
         FunctionType enclosing = currFuntion;
         currFuntion = type;
@@ -123,8 +132,8 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
         resolve(function.body);
         endScope();
         currFuntion = enclosing;
-    }   
-    
+    }
+
     @Override
     public Void visitClassStmt(Stmt.Class stmt)
     {
@@ -159,9 +168,9 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
         endScope();
         if(stmt.superclass != null) endScope();
         this.currClass = prev;
-        return null;    
+        return null;
     }
-    
+
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt)
     {
@@ -189,23 +198,25 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     @Override
     public Void visitWhileStmt(Stmt.While stmt)
     {
+        currStack.push(INNERMOST.LOOP);
         boolean enclosing = inLoop;
         resolve(stmt.condition);
         inLoop = true;
         resolve(stmt.body);
         inLoop = enclosing;
+        currStack.pop();
         return null;
     }
 
     @Override
     public Void visitReturnStmt(Stmt.Return stmt)
     {
-        if(currFuntion == FunctionType.NONE) 
+        if(currFuntion == FunctionType.NONE)
         {
             Lox.error(stmt.keyword, "Cannot return from top-level code.");
             return null; //return is not at the right location, why continue resolving the expression to be returned? This is a design choice.
         }
-        if(stmt.value != null) 
+        if(stmt.value != null)
         {
             if(currFuntion == FunctionType.INITIALIZER)
             {
@@ -220,7 +231,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     @Override
     public Void visitBreakStmt(Stmt.Break stmt)
     {
-        if(inLoop == false)
+        if(inLoop == false || currStack.peek() != INNERMOST.LOOP)
         {
             Lox.error(stmt.breakToken, "Can use 'break' only inside loop bodies.");
         }
@@ -256,7 +267,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     {
         if(currClass == ClassType.NONE){
             Lox.error(expr.keyword, "Cannot use 'this' outside a class.");
-            return null;    
+            return null;
         }
         if(currFuntion == FunctionType.STATICMETHOD)
         {
@@ -272,24 +283,24 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
       resolve(expr.right);
       return null;
     }
-    
+
     @Override
     public Void visitCallExpr(Expr.Call expr) {
       resolve(expr.calee);
-  
+
       for (Expr argument : expr.arguments) {
         resolve(argument);
       }
-  
+
       return null;
     }
-  
+
     @Override
     public Void visitGroupingExpr(Expr.Grouping expr) {
       resolve(expr.expression);
       return null;
     }
-    
+
     @Override
     public Void visitLiteralExpr(Expr.Literal expr) {
       return null;
@@ -307,7 +318,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
       resolve(expr.right);
       return null;
     }
-  
+
     @Override
     public Void visitTernaryExpr(Expr.Ternary expr)
     {
@@ -331,7 +342,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
     public Void visitGetExpr(Expr.Get expr) {
       resolve(expr.object);
       return null;
-    }  
+    }
 
     @Override
     public Void visitSetExpr(Expr.Set expr)
@@ -378,5 +389,5 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>{
         }
         resolve(function.body);
         endScope();
-    }    
+    }
 }
