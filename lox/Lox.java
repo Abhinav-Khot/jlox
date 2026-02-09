@@ -17,10 +17,15 @@ public class Lox {
   public static void main(String[] args) throws IOException {
     if (args.length > 1) {
       System.out.println("Usage: jlox [script]");
-      System.exit(64); 
+      System.exit(64);
     } else if (args.length == 1) {
       runFile(args[0]);
-    } else {
+    }
+    // else if (args.length == 2)
+    //   {
+    //       runByteCode(args[0]);
+    //   }
+      else {
       runPrompt();
     }
   }
@@ -39,7 +44,7 @@ public class Lox {
     InputStreamReader input = new InputStreamReader(System.in);
     BufferedReader reader = new BufferedReader(input);
 
-    for (;;) { 
+    for (;;) {
       System.out.print("> ");
       String line = reader.readLine();
       if (line == null) break;
@@ -54,7 +59,7 @@ public class Lox {
     List<Token> tokens = scanner.scanTokens();
 
     if (hadError) return;
-    
+
     Parser parser = new Parser(tokens, repl_mode);
     List<Stmt> statements = parser.parse();
 
@@ -65,10 +70,28 @@ public class Lox {
     resolver.resolve(statements);
 
     if(hadError) return;
-    
+
     interpreter.interpret(statements, repl_mode);
   }
 
+  private static void runByteCode(String source, boolean repl_mode) {
+    Scanner scanner = new Scanner(source);
+    List<Token> tokens = scanner.scanTokens();
+
+    if (hadError) return;
+
+    Parser parser = new Parser(tokens, repl_mode);
+    List<Stmt> statements = parser.parse();
+
+    // Stop if there was a syntax error.
+    if (hadError) return;
+
+    Resolver resolver = new Resolver(interpreter);
+    resolver.resolve(statements);
+
+    if(hadError) return;
+
+  }
   static void error(int line, String message)
   {
       report(line, "", message);
@@ -91,7 +114,7 @@ public class Lox {
     System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
     hadRuntimeError = true;
   }
-  
+
   static void NativeError(NativeError error) {
     System.err.println(error.getMessage());
     hadRuntimeError = true;
