@@ -51,7 +51,7 @@ logic_or       → logic_and ( "or" logic_and )*
 
 logic_and      → anonymous_func ( "and" anonymous_func )*
 
-anonymous_func → "FUN" function ";" | equality
+anonymous_func → "FUN" function | equality
 
 equality       → comparison ( ( "!=" | "==" ) comparison )*
 
