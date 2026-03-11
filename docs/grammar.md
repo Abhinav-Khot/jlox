@@ -49,7 +49,7 @@ ternary        → logic_or ("?" ternary ":" ternary)
 
 logic_or       → logic_and ( "or" logic_and )*
 
-logic_and      → equality ( "and" equality )*
+logic_and      → anonymous_func ( "and" anonymous_func )*
 
 anonymous_func → "FUN" function ";" | equality
 
