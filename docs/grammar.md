@@ -8,9 +8,9 @@ declaration    → classDecl | funDecl | varDecl | statement
 classDecl      → "class" IDENTIFIER ("<" IDENTIFIER)?
                  "{" ( ("static")? function)* "}"
 
-funDecl        → "fun" function
+funDecl        → "fun" IDENTIFIER function
 
-function       → IDENTIFIER "(" parameters? ")" block
+function       →  "(" parameters? ")" block
 
 parameters     → IDENTIFIER ("," IDENTIFIER)*
 
