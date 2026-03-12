@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.8.0">
+     
+     
+    <link rel="icon" type="image/png" sizes="192x192" href="../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Basic Syntax - Lox Docs</title>
+
+
+<link href="../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../css/normalize.css" rel="stylesheet">
+<link href="../css/terminal.css" rel="stylesheet">
+<link href="../css/theme.css" rel="stylesheet">
+<link href="../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../css/theme.footer.css" rel="stylesheet">
+<!-- dark color palette -->
+<link href="../css/palettes/dark.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+     
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "..",
+    shortcuts = "{}";
+</script>
+<script src="../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="/" class="no-style">Lox Docs</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href=".." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../Arrays/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Arrays</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="./" class="menu-item active" property="item" typeof="WebPage">
+                        <span property="name">Basic Syntax</span>
+                    </a>
+                    <meta property="position" content="2">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../Classes/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Classes</span>
+                    </a>
+                    <meta property="position" content="3">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../Loops/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Loops</span>
+                    </a>
+                    <meta property="position" content="4">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../functions/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Functions</span>
+                    </a>
+                    <meta property="position" content="5">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../grammar/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Grammar</span>
+                    </a>
+                    <meta property="position" content="6">
+                </li>
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="7">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../Arrays/">Arrays</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Basic Syntax</span>
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../Classes/">Classes</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../Loops/">Loops</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../functions/">Functions</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../grammar/">Grammar</a>
+        
+    
+    
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#basic-syntax">Basic Syntax</a></li>
+        <li><a href="#numbers">Numbers</a></li>
+        <li><a href="#strings">Strings</a></li>
+        <li><a href="#variables">Variables</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+        <li><a href="#booleans">Booleans</a></li>
+        <li><a href="#truthiness">Truthiness</a></li><li><a href="#if-else-statements">If-else statements</a></li>
+        <li><a href="#ternary">Ternary</a></li>
+        <li><a href="#print">Print</a></li>
+        <li><a href="#comments">Comments</a></li>
+        
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="basic-syntax">Basic Syntax</h1>
+<h1 id="numbers">Numbers</h1>
+<p>Numebrs in lox are <strong>double-precision floating point numbers</strong> by default. Addition / Subtraction / Multiplication and Division is supported natively.</p>
+<h1 id="strings">Strings</h1>
+<p>Strings in lox are to be enclosed in double-inverted commas. String concatenation is supported through the <code>+</code> operator</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code>var a = &quot;Hello &quot;;
+var b = &quot;World&quot;;
+
+var c = a + b; // c contains &quot;Hello World&quot;
+</code></pre></div>
+<h1 id="variables">Variables</h1>
+<p>Variables are declared and assigned with the following syntax</p>
+<div class="highlight"><pre><span></span><code>var &lt;variable_name&gt; ;
+var &lt;variable_name&gt; = &lt;expresssion&gt;;
+</code></pre></div>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code>var a;
+var b = 16;
+</code></pre></div>
+<p>Until the value of the variable is intialized, it holds the value <code>nil</code></p>
+<details class="terminal-alert terminal-alert-error">
+<summary>Warning</summary>
+<p><strong>Note</strong> : Redeclaring variables is only allowed in the global scope. Any attempt to redeclare variables in a local scope will lead to an error.</p>
+</details>
+<h1 id="assignment">Assignment</h1>
+<p>Variable assignnments are considered to be expressions by lox and thus return the value that is being assigned. This allows for chained assignment.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code>var a;
+var b;
+var c;
+
+c = b = a = 5;
+</code></pre></div></p>
+<h1 id="booleans">Booleans</h1>
+<p>Booleans in lox are denoted by <code>true</code> and <code>false</code>.</p>
+<h3 id="truthiness">Truthiness</h3>
+<p>In lox only <code>nil</code> and <code>false</code> are Falsy values. Every other value is considered to be Truthy.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight"><pre><span></span><code>if (12)
+{
+    print &quot;Yes&quot;; 
+} 
+// Yes
+</code></pre></div>
+<h1 id="if-else-statements">If-else statements</h1>
+<p><strong>Syntax</strong></p>
+<div class="highlight"><pre><span></span><code>if (&lt;condition&gt;)
+{
+    &lt;statements&gt;
+}
+else
+{
+    &lt;statements&gt;   
+}
+</code></pre></div>
+<p>If the block has only one statement, the braces can be ommitted.</p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code>if (18 &gt;= 7)
+{
+    print &quot;larger&quot;;
+}
+else print &quot;smaller&quot;;
+</code></pre></div></p>
+<h1 id="ternary">Ternary</h1>
+<p>Lox provides inline support for branching statements through the ternary operator. </p>
+<p><strong>Syntax</strong></p>
+<p><div class="highlight"><pre><span></span><code>condition ? expression1 : expression2
+</code></pre></div>
+<strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code>var a = 16 &gt; 2 ? 5 : 7;
+</code></pre></div>
+<h1 id="print">Print</h1>
+<p>Lox allows outputting outside the program through <code>print</code>.</p>
+<p><strong>Syntax</strong>
+<div class="highlight"><pre><span></span><code>print &lt;expression&gt;;
+</code></pre></div></p>
+<p><strong>Example</strong>
+<div class="highlight"><pre><span></span><code>print &quot;Hello World&quot;;    
+</code></pre></div></p>
+<h1 id="comments">Comments</h1>
+<p>Single line comments begin with <code>//</code> and multiline comments can be enclosed in <code>/*</code> and <code>*/</code>.</p>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>

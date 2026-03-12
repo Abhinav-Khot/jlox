@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="generator" content="mkdocs-1.6.1, mkdocs-terminal-4.8.0">
+     
+     
+    <link rel="icon" type="image/png" sizes="192x192" href="../img/android-chrome-192x192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="../img/android-chrome-512x512.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png" />
+<link rel="shortcut icon" type="image/png" sizes="48x48" href="../img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="../img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png" />
+
+
+    
+ 
+<title>Classes - Lox Docs</title>
+
+
+<link href="../css/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<link href="../css/fontawesome/css/solid.min.css" rel="stylesheet">
+<link href="../css/normalize.css" rel="stylesheet">
+<link href="../css/terminal.css" rel="stylesheet">
+<link href="../css/theme.css" rel="stylesheet">
+<link href="../css/theme.tile_grid.css" rel="stylesheet">
+<link href="../css/theme.footer.css" rel="stylesheet">
+<!-- dark color palette -->
+<link href="../css/palettes/dark.css" rel="stylesheet">
+
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+
+
+
+     
+    
+    
+
+    
+    <!-- search css support -->
+<link href="../css/search/bootstrap-modal.css" rel="stylesheet">
+<!-- search scripts -->
+<script>
+    var base_url = "..",
+    shortcuts = "{}";
+</script>
+<script src="../js/jquery/jquery-1.10.1.min.js" defer></script>
+<script src="../js/bootstrap/bootstrap.min.js" defer></script>
+<script src="../js/mkdocs/base.js" defer></script>
+    
+    
+    
+    
+    <script src="../search/main.js"></script>
+    
+
+    
+</head>
+
+<body class="terminal"><div class="container">
+    <div class="terminal-nav">
+        <header class="terminal-logo">
+            <div id="mkdocs-terminal-site-name" class="logo terminal-prompt"><a href="/" class="no-style">Lox Docs</a></div>
+        </header>
+        
+        <nav class="terminal-menu">
+            
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href=".." class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="0">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../Arrays/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Arrays</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../BasicSyntax/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Basic Syntax</span>
+                    </a>
+                    <meta property="position" content="2">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="./" class="menu-item active" property="item" typeof="WebPage">
+                        <span property="name">Classes</span>
+                    </a>
+                    <meta property="position" content="3">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../Loops/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Loops</span>
+                    </a>
+                    <meta property="position" content="4">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../functions/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Functions</span>
+                    </a>
+                    <meta property="position" content="5">
+                </li>
+                
+                
+                <li property="itemListElement" typeof="ListItem">
+                    <a href="../grammar/" class="menu-item " property="item" typeof="WebPage">
+                        <span property="name">Grammar</span>
+                    </a>
+                    <meta property="position" content="6">
+                </li>
+                
+                    
+                    
+
+
+<li property="itemListElement" typeof="ListItem">
+    <a href="#" class="menu-item" data-toggle="modal" data-target="#mkdocs_search_modal" property="item" typeof="SearchAction">
+        <i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+    </a>
+    <meta property="position" content="7">
+</li>
+                    
+            </ul>
+            
+        </nav>
+    </div>
+</div>
+        
+    <div class="container">
+        <div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+    <ul class="terminal-mkdocs-side-nav-items">
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="..">Home</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../Arrays/">Arrays</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../BasicSyntax/">Basic Syntax</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        <span class="terminal-mkdocs-side-nav-item--active">Classes</span>
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../Loops/">Loops</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../functions/">Functions</a>
+        
+    
+    
+    
+       </li>
+        
+          <li class="terminal-mkdocs-side-nav-li">
+    
+    
+    
+        
+        
+            <a class="terminal-mkdocs-side-nav-item" href="../grammar/">Grammar</a>
+        
+    
+    
+    
+       </li>
+        
+    </ul>
+</nav><hr>
+<nav>
+    <ul>
+        <li><a href="#classes">Classes</a></li>
+        <li><a href="#syntax">Syntax</a></li>
+        <li><a href="#this">This</a></li>
+        <li><a href="#constructor">Constructor</a></li>
+        <li><a href="#static-methods">Static methods</a></li>
+        <li><a href="#inheritance">Inheritance</a></li>
+        
+    </ul>
+</nav>
+</aside>
+            <main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+    <h1 id="classes">Classes</h1>
+<h1 id="syntax">Syntax</h1>
+<p>Class in lox can be defined with the following syntax:</p>
+<div class="highlight"><pre><span></span><code>class &lt;class_name&gt; &lt; &lt;parentclass_name&gt;
+{
+
+    init(&lt;parameters&gt;) //the constructor
+    {
+
+    }
+
+    method_1(&lt;parameters&gt;)
+    {
+        ...
+    }
+    .
+    .
+    .
+    static smethod_1(&lt;parameters&gt;)
+    {
+        ....
+    }
+
+}
+</code></pre></div>
+<h1 id="this">This</h1>
+<p>To refer to the current object in the methohds, the keyword <code>this</code> can be used. Using <code>this</code> in static methods will throw an error.</p>
+<h1 id="constructor">Constructor</h1>
+<p>The constructor of the class can be defined through <code>init</code>. Each of the methods of the classes are defined the same way functions are defined with the only change being that we dont use the <code>fun</code> keyword. </p>
+<p>Note that in case of a class having a parent class, when the object for the class is initialized, only the constructor for the subclass is called automatically. If one wishes to call the constructor of the parent class, they can do so with <code>super</code> . An example of this is shown in the <code>Inheritance</code> section.</p>
+<h1 id="static-methods">Static methods</h1>
+<p>Lox has support for static methods, which can directly be called from the class without instantiating an object for that class. All such methods must be prefixed with the <code>static</code>.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>class Math{
+    init()
+    {
+        print &quot;math module initialized&quot;;
+    }
+
+    static square(a){
+         return a * a;
+    }
+
+    static min(a, b){
+        if (a &lt; b) return a;
+        return b;
+    }
+
+    static max(a, b){
+        if (a &gt; b) return a;
+        return b;
+    }
+
+    static abs(a){
+        return a &gt; 0 ? a : -a;
+    }
+}
+
+print Math.square(6);
+print Math.min(10, 5);
+print Math.max(782, 37349);
+print Math.abs(-92);
+</code></pre></div>
+<h1 id="inheritance">Inheritance</h1>
+<p>Lox has support for single - inheritance. During the definintion of the class the parent class is to be specified after the <code>&lt;</code> token. All the methods of the parent class including the constructor are available to the child class. When a method is called from the child class / object, first the method is searched in the sub class and then the super class.</p>
+<p>Suppose two methods with the same name exist in both the subclass and the superclass and a user wants to call the method in the superclass directly, <code>super</code> can be used.</p>
+<p><strong>Example</strong></p>
+<div class="highlight"><pre><span></span><code>class Vehicle{
+    init(name)
+    {
+        this.name = name;
+    }
+
+    forward()
+    {
+        print this.name + &quot; Moves forward&quot;;
+    }
+}
+
+class Car &lt; Vehicle{
+    init(name)
+    {
+        super.init(name);
+    }
+
+    wheels()
+    {
+        print this.name + &quot; Has four wheels&quot;;
+    }
+}
+
+class Bike &lt; Vehicle{
+    init(name)
+    {
+        super.init(name);
+    }
+
+    wheels()
+    {
+        print this.name + &quot; Has two wheels&quot;;
+    }
+}
+
+var honda = Bike(&quot;Honda&quot;);
+honda.forward();
+honda.wheels();
+
+var mclaren = Car(&quot;McLaren&quot;);
+mclaren.forward();
+mclaren.wheels();
+</code></pre></div>
+<details class="terminal-alert terminal-alert-primary">
+<summary>Important</summary>
+<p>lox forbids the use of <code>super</code> in static methods.</p>
+</details>
+<details class="terminal-alert terminal-alert-error">
+<summary>Warning</summary>
+<p>When an object is created <code>init</code> is automatically called for the base class and if it is called again explicitly by the user, an error is thrown.</p>
+</details>
+</section>
+
+            </main>
+        </div>
+        <hr><footer>
+    <div class="terminal-mkdocs-footer-grid">
+        <div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+    </div>
+</footer>
+    </div>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="alertdialog" aria-modal="true" aria-labelledby="searchModalLabel">
+    <div class="modal-dialog modal-lg" role="search">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">Search</h5>
+                <button type="button" class="close btn btn-default btn-ghost" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p id="searchInputLabel">Type to start searching</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" aria-labelledby="searchInputLabel" placeholder="" id="mkdocs-search-query" title="Please enter search terms here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No document matches found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</body>
+
+</html>
