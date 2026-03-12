@@ -43,13 +43,13 @@ block          → "{" declaration* "}"
 ```
 expression     → assignment ;
 
-assignment     → ( call "." )? IDENTIFIER "=" assignment | ternary
+assignment     → ( call_or_access "." )? IDENTIFIER "=" assignment | ternary
 
 ternary        → logic_or ("?" ternary ":" ternary)
 
 logic_or       → logic_and ( "or" logic_and )*
 
-logic_and      → anonymous_func ( "and" anonymous_func )*
+logic_and      → equality ( "and" equality )*
 
 anonymous_func → "FUN" function | equality
 
@@ -61,9 +61,9 @@ term           → factor ( ( "-" | "+" ) factor )*
 
 factor         → unary ( ( "/" | "*" ) unary )*
 
-unary          → ( "!" | "-" ) unary | call
+unary          → ( "!" | "-" ) unary | call_or_access 
 
-call           → primary ( "(" arguments? ")" | "." IDENTIFIER )*
+call_or_access → primary ( "(" arguments? ")" | "." IDENTIFIER )* 
 
 primary        → "true" | "false" | "nil" | "this"
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"

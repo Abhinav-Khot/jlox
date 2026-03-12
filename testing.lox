@@ -1,2 +1,6 @@
-var x;
-var x;
+fun caller(f)
+{
+    f();
+}
+
+caller(lambda() {print 1;});

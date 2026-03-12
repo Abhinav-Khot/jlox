@@ -349,7 +349,7 @@ class Parser
 
     private Expr and()
     {
-        Expr expr = anonymousFunction();
+        Expr expr = equality();
 
         if(match(AND))
         {
@@ -360,34 +360,6 @@ class Parser
         }
 
         return expr;
-    }
-
-    private Expr anonymousFunction()
-    {
-        if(match(FUN))
-        {
-            consume(LEFT_PAREN, "Expected '(' afer 'fun'.");
-            List<Token> parameters = new ArrayList<>();
-
-            if(!check(RIGHT_PAREN))
-            {
-                do{
-                    if(parameters.size() >= 255)
-                    {
-                        error(peek(), "Cannot have more than 255 parameters.");
-                    }
-                    parameters.add(consume(IDENTIFIER, "Expected parameter name."));
-                }
-                while(match(COMMA));
-            }
-
-            consume(RIGHT_PAREN, "Expected ')' after parameters.");
-            consume(LEFT_BRACE, "Expected '{' before function body.");
-            List<Stmt> body = block();
-            return new Expr.AnonymousFunction(parameters, body);
-        }
-
-        return equality();
     }
 
 
@@ -481,6 +453,7 @@ class Parser
         if (match(FALSE)) return new Expr.Literal(false);
         if (match(TRUE)) return new Expr.Literal(true);
         if (match(NIL)) return new Expr.Literal(null);
+        if (match(LAMBDA)) return anonymousFunction();
 
         if (match(NUMBER, STRING)) {
           return new Expr.Literal(previous().literal);
@@ -521,6 +494,29 @@ class Parser
         Token paren = consume(RIGHT_PAREN, "Expected ')' after arguments.");
 
         return new Expr.Call(callee, paren, args);
+    }
+
+    private Expr anonymousFunction()
+    {
+        consume(LEFT_PAREN, "Expected '(' afer 'fun'.");
+        List<Token> parameters = new ArrayList<>();
+
+        if(!check(RIGHT_PAREN))
+        {
+            do{
+                if(parameters.size() >= 255)
+                {
+                    error(peek(), "Cannot have more than 255 parameters.");
+                }
+                parameters.add(consume(IDENTIFIER, "Expected parameter name."));
+            }
+            while(match(COMMA));
+        }    
+
+        consume(RIGHT_PAREN, "Expected ')' after parameters.");
+        consume(LEFT_BRACE, "Expected '{' before function body.");
+        List<Stmt> body = block();
+        return new Expr.AnonymousFunction(parameters, body);
     }
 
     private boolean match(TokenType... types)

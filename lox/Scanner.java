@@ -36,6 +36,7 @@ class Scanner {
         keywords.put("while",  WHILE);
         keywords.put("break" , BREAK);
         keywords.put("static", STATIC);
+        keywords.put("lambda", LAMBDA);
     }
 
     Scanner(String source)

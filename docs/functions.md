@@ -47,12 +47,12 @@ Lox functions are first-class i.e they can be treated like any other varibale an
 
 ## Lambdas / Anonymous Functions
 
-Lox supports anonymous functions too. The syntax remains mostly the same with the exception of the function name not being included in the definition. These lambdas are considered expressions by lox.
+Lox supports anonymous functions too. The syntax remains mostly the same with the exception of the function name not being included in the definition and the keyword `lambda` being used. These lambdas are considered expressions by lox. 
 
 **Syntax**
 
 ```
-fun (<parameters>) {
+lambda (<parameters>) {
     <statements>
 }
 ```
@@ -60,14 +60,23 @@ fun (<parameters>) {
 **Example**
 
 ```
-var fibonacci = fun (a){
+var fibonacci = lambda (a){
     if (a == 0) return 0;
     if (a == 1 or a == 2) return 1;
     
     return fibonacci(a - 1) + fibonacci(a - 2);
 };
 
-print fibonacci(10);    
+print fibonacci(10);
+```
+
+```
+fun caller(f)
+{
+    f();
+}
+
+caller(lambda() {print 1;});
 ```
 
 
