@@ -51,8 +51,6 @@ logic_or       → logic_and ( "or" logic_and )*
 
 logic_and      → equality ( "and" equality )*
 
-anonymous_func → "FUN" function | equality
-
 equality       → comparison ( ( "!=" | "==" ) comparison )*
 
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )*
@@ -65,9 +63,11 @@ unary          → ( "!" | "-" ) unary | call_or_access
 
 call_or_access → primary ( "(" arguments? ")" | "." IDENTIFIER )* 
 
-primary        → "true" | "false" | "nil" | "this"
+primary        → "true" | "false" | "nil" | "this" | anonFunc |
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"
                | "super" "." IDENTIFIER | "[" elements? "]"
+
+anonymous_func → "lambda" function
 
 arguments      → expression ("," expression)*
 
